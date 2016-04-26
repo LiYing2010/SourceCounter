@@ -1,5 +1,5 @@
 This is a source counter tool which can count the lines of your source code.
-It can tell you that how many lines of statemene/document/comment/empty if your source code files. 
+It can tell you that how many lines of statement/document/comment/empty in your source code files.
 
 
 Source File Supported
@@ -19,4 +19,4 @@ Source File Supported
 Feature
 ===========
 - Now this tools can be run from the command line
-- TODO: I am creating a Eclipse plug-in so you can count source code from the Eclipse IDE 
+- TODO: I am creating a Eclipse plug-in so you can count source code from the Eclipse IDE
