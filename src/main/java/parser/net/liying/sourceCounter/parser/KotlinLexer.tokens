@@ -1,0 +1,7 @@
+Document=1
+SingleLineComment=2
+MultiLineComment=3
+SingleLineString=4
+MultiLineString=5
+Statement=6
+Whitespace=7

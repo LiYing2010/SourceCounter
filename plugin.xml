@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            objectClass="org.eclipse.core.resources.IFile"
+            id="SourceCounter.contribution1">
+         <menu
+               label="Source Counter"
+               path="additions"
+               id="SourceCounter.menu1">
+            <separator
+                  name="group1">
+            </separator>
+         </menu>
+         <action
+               label="Count"
+               class="net.liying.sourceCounter.plugin.popup.actions.SourceCountAction"
+               menubarPath="SourceCounter.menu1/group1"
+               enablesFor="1"
+               id="SourceCounter.newAction">
+         </action>
+      </objectContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            name="SourceCounter"
+            id="net.liying.sourceCounter.plugin.views.SourceCountResult">
+      </category>
+      <view
+            name="Source Count Result"
+            icon="icons/sample.gif"
+            category="net.liying.sourceCounter.plugin.views.SourceCountResult"
+            class="net.liying.sourceCounter.plugin.views.SourceCountResultView"
+            id="net.liying.sourceCounter.plugin.views.SourceCountResultView">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="org.eclipse.jdt.ui.JavaPerspective">
+         <view
+               ratio="0.5"
+               relative="org.eclipse.ui.views.ProblemView"
+               relationship="right"
+               id="net.liying.sourceCounter.plugin.views.SourceCountResultView">
+         </view>
+      </perspectiveExtension>
+   </extension>
+   <extension
+         point="org.eclipse.help.contexts">
+      <contexts
+            file="contexts.xml">
+      </contexts>
+   </extension>
+
+</plugin>
