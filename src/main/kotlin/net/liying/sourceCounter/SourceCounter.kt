@@ -1,11 +1,13 @@
 package net.liying.sourceCounter
 
+import java.io.*
+
 import net.liying.sourceCounter.parser.base.*
 import net.liying.sourceCounter.parser.*
 
 import org.antlr.v4.runtime.*
 
-class CountResult(val fileName: String, val type: String) {
+class CountResult(val file: File, val type: String) {
 	var total: Int = 0;
 
 	var statement: Int = 0;
@@ -17,7 +19,7 @@ class CountResult(val fileName: String, val type: String) {
 	var empty: Int = 0;
 
 	fun print() {
-		println("""File: ${this.fileName}
+		println("""File: ${this.file.absolutePath}
 				|Type: ${this.type}
 				|Total: ${this.total}
 				|Statement: ${this.statement}
@@ -28,8 +30,8 @@ class CountResult(val fileName: String, val type: String) {
 	}
 }
 
-class SourceCounter(val fileName: String, val type: String, val lexer: BaseLexer?) {
-	val countResult = CountResult(this.fileName, this.type)
+class SourceCounter(val file: File, val type: String, val lexer: BaseLexer?) {
+	val countResult = CountResult(this.file, this.type)
 
 	fun count() {
 		if (this.lexer == null) {
@@ -87,22 +89,23 @@ class SourceCounter(val fileName: String, val type: String, val lexer: BaseLexer
 	}
 }
 
+fun buildSourceCounter(file: File, encoding: String = "UTF-8"): SourceCounter {
+	val normalizedFile = file.normalize()
 
-fun buildSourceCounter(fileName: String): SourceCounter {
-	val input = ANTLRFileStream(fileName)
-
+	val fileName = normalizedFile.absolutePath
 	val ext = fileName.substringAfterLast('.', "").toLowerCase()
+
+	val reader = InputStreamReader(FileInputStream(normalizedFile), encoding)
+	val input = ANTLRInputStream(reader)
 
 	return when (ext) {
 		"java"
-			-> SourceCounter(fileName, "Java", JavaLexer(input))
+			-> SourceCounter(normalizedFile, "Java", JavaLexer(input))
 
 		"kt"
-			-> SourceCounter(fileName, "Kotlin", KotlinLexer(input))
+			-> SourceCounter(normalizedFile, "Kotlin", KotlinLexer(input))
 
 		else
-			-> SourceCounter(fileName, "Unknown", null)
+			-> SourceCounter(normalizedFile, "Unknown", null)
 	}
 }
-
-

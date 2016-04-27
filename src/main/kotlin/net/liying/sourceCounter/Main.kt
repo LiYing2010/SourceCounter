@@ -13,7 +13,7 @@ fun main(args: Array<String>) {
 	}
 
 	for (file in fileList) {
-		val sourceCounter = buildSourceCounter(file.normalize().absolutePath)
+		val sourceCounter = buildSourceCounter(file)
 		sourceCounter.count()
 		sourceCounter.countResult.print()
 

@@ -5,21 +5,21 @@
    <extension
          point="org.eclipse.ui.popupMenus">
       <objectContribution
-            objectClass="org.eclipse.core.resources.IFile"
-            id="SourceCounter.contribution1">
+            adaptable="true"
+            id="SourceCounter.contribution1"
+            objectClass="org.eclipse.core.resources.IResource">
          <menu
                label="Source Counter"
                path="additions"
-               id="SourceCounter.menu1">
+               id="SourceCounter.menu">
             <separator
-                  name="group1">
+                  name="count">
             </separator>
          </menu>
          <action
                label="Count"
                class="net.liying.sourceCounter.plugin.popup.actions.SourceCountAction"
-               menubarPath="SourceCounter.menu1/group1"
-               enablesFor="1"
+               menubarPath="SourceCounter.menu/count"
                id="SourceCounter.newAction">
          </action>
       </objectContribution>
@@ -49,12 +49,6 @@
                id="net.liying.sourceCounter.plugin.views.SourceCountResultView">
          </view>
       </perspectiveExtension>
-   </extension>
-   <extension
-         point="org.eclipse.help.contexts">
-      <contexts
-            file="contexts.xml">
-      </contexts>
    </extension>
 
 </plugin>
