@@ -8,10 +8,13 @@ import org.eclipse.jface.viewers.ISelection
 import org.eclipse.jface.viewers.IStructuredSelection
 
 import net.liying.sourceCounter.*
+import net.liying.sourceCounter.plugin.views.SourceCountResultView
+
+data class FileCountResult(val file: IFile, val countResult: CountResult)
 
 class SourceCounterRunner(val selection: IStructuredSelection) {
 	companion object Runner {
-		fun count(selection: ISelection) {
+		fun count(selection: ISelection?) {
 			if (selection is IStructuredSelection) {
 				SourceCounterRunner(selection).count()
 			}
@@ -20,6 +23,8 @@ class SourceCounterRunner(val selection: IStructuredSelection) {
 
 	private val processedResourceSet = mutableSetOf<IResource>()
 
+	private val countResultList = mutableListOf<FileCountResult>()
+
 	private fun count() {
 		this.selection.toList().forEach {
 			item ->
@@ -27,6 +32,9 @@ class SourceCounterRunner(val selection: IStructuredSelection) {
 					this.countResource(item)
 				}
 		}
+
+		val resultView = SourceCountResultView.showView()
+		resultView?.showResult(this.countResultList)
 	}
 
 	private fun countResource(resource: IResource) {
@@ -56,7 +64,6 @@ class SourceCounterRunner(val selection: IStructuredSelection) {
 		val counter = buildSourceCounter(osFile, charSet)
 		counter.count()
 
-		println("CharSet: ${charSet}; File: ${osFile}")
-		counter.countResult.print()
+		this.countResultList.add(FileCountResult(file, counter.countResult))
 	}
 }

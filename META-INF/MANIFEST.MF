@@ -11,4 +11,4 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: lib/antlr-runtime-4.5.3.jar,
  lib/kotlin-runtime-1.0.1-2.jar,
- .
+ var/classes/
