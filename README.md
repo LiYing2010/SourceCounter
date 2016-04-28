@@ -18,5 +18,4 @@ Source File Supported
 
 Feature
 ===========
-- Now this tools can be run from the command line
-- TODO: I am creating a Eclipse plug-in so you can count source code from the Eclipse IDE
+- There is an Eclipse plug-in so you can count source code from the Eclipse IDE
