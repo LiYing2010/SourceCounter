@@ -19,3 +19,12 @@ Source File Supported
 Feature
 ===========
 - There is an Eclipse plug-in so you can count source code from the Eclipse IDE
+
+You can select source folders, Java packages, source files, and then select the menu item "Source Counter" => "Count":
+ 
+![Popup menu](/doc/img/popupMenu.png?raw=true "Popup menu")
+
+The count result will be shown in the Source Count Result View:
+
+![Source Count Result View](/doc/img/countResultView.png?raw=true "Source Count Result View")
+
