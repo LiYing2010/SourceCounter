@@ -4,7 +4,7 @@ import org.eclipse.ui.PlatformUI
 import org.eclipse.swt.SWT
 import org.eclipse.swt.widgets.TableItem
 
-import net.liying.sourceCounter.CountResult
+import net.liying.sourceCounter.*
 import net.liying.sourceCounter.plugin.views.base.BaseSourceCountResultView
 import net.liying.sourceCounter.plugin.FileCountResult
 
@@ -43,7 +43,7 @@ class SourceCountResultView: BaseSourceCountResultView() {
 
 				val item = TableItem(this.table, SWT.NONE)
 
-				item.setText(arrayOf(
+				var textArray = arrayOf(
 						// Name
 						file.name,
 						// Resource Path
@@ -53,7 +53,9 @@ class SourceCountResultView: BaseSourceCountResultView() {
 						// Extension
 						file.fullPath.getFileExtension(),
 						// Type
-						countResult.type,
+						countResult.type)
+				if (countResult.type != Type.Unknown) {
+					textArray += arrayOf(
 						// Statement
 						countResult.statement.toString(),
 						// Document
@@ -64,7 +66,10 @@ class SourceCountResultView: BaseSourceCountResultView() {
 						countResult.empty.toString(),
 						// Total
 						countResult.total.toString()
-					))
+					)
+				}
+
+				item.setText(textArray)
 		}
 
 		val item = TableItem(this.table, SWT.NONE)

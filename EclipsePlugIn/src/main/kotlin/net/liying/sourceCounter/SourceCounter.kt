@@ -7,6 +7,24 @@ import net.liying.sourceCounter.parser.*
 
 import org.antlr.v4.runtime.*
 
+class Extetion {
+	companion object {
+		const val Java = "java"
+
+		const val Kotlin = "kt"
+	}
+}
+
+class Type {
+	companion object {
+		const val Unknown = "Unknown"
+
+		const val Java = "Java"
+
+		const val Kotlin = "Kotlin"
+	}
+}
+
 class CountResult(val file: File?, val type: String?) {
 	var total: Int = 0;
 
@@ -118,13 +136,13 @@ fun buildSourceCounter(file: File, encoding: String = "UTF-8"): SourceCounter {
 	val input = ANTLRInputStream(reader)
 
 	return when (ext) {
-		"java"
-			-> SourceCounter(normalizedFile, "Java", JavaLexer(input))
+		Extetion.Java
+			-> SourceCounter(normalizedFile, Type.Java, JavaLexer(input))
 
-		"kt"
-			-> SourceCounter(normalizedFile, "Kotlin", KotlinLexer(input))
+		Extetion.Kotlin
+			-> SourceCounter(normalizedFile, Type.Kotlin, KotlinLexer(input))
 
 		else
-			-> SourceCounter(normalizedFile, "Unknown", null)
+			-> SourceCounter(normalizedFile, Type.Unknown, null)
 	}
 }

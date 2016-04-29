@@ -7,7 +7,7 @@ import org.eclipse.ui.IActionDelegate
 import org.eclipse.ui.IObjectActionDelegate
 import org.eclipse.ui.IWorkbenchPart
 
-import net.liying.sourceCounter.plugin.SourceCounterRunner;
+import net.liying.sourceCounter.plugin.SourceCounterRunner
 
 class SourceCountAction: IObjectActionDelegate {
 	private var shell: Shell? = null
