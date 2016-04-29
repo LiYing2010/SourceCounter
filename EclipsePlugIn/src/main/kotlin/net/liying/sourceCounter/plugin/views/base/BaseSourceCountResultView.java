@@ -4,6 +4,8 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.part.ViewPart;
@@ -20,13 +22,16 @@ public class BaseSourceCountResultView extends ViewPart {
 	protected TableColumn commentColumn;
 	protected TableColumn emptyColumn;
 	protected TableColumn totalColumn;
+	protected MenuItem copyMenuItem;
+	protected MenuItem clearMenuItem;
+	protected MenuItem selectAllMenuItem;
 
 	public BaseSourceCountResultView() {
 	}
 
 	@Override
 	public void createPartControl(Composite parent) {
-		TableViewer tableViewer = new TableViewer(parent, SWT.BORDER | SWT.FULL_SELECTION);
+		TableViewer tableViewer = new TableViewer(parent, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI);
 		table = tableViewer.getTable();
 		table.setLinesVisible(true);
 		table.setHeaderVisible(true);
@@ -85,6 +90,20 @@ public class BaseSourceCountResultView extends ViewPart {
 		totalColumn.setAlignment(SWT.RIGHT);
 		totalColumn.setWidth(100);
 		totalColumn.setText("Total");
+
+		Menu menu = new Menu(table);
+		table.setMenu(menu);
+
+		selectAllMenuItem = new MenuItem(menu, SWT.NONE);
+		selectAllMenuItem.setText("Select All");
+
+		copyMenuItem = new MenuItem(menu, SWT.NONE);
+		copyMenuItem.setText("Copy");
+
+		new MenuItem(menu, SWT.SEPARATOR);
+
+		clearMenuItem = new MenuItem(menu, SWT.NONE);
+		clearMenuItem.setText("Clear");
 	}
 
 	@Override

@@ -1,8 +1,13 @@
 package net.liying.sourceCounter.plugin.views
 
+import java.lang.StringBuilder
+
 import org.eclipse.ui.PlatformUI
 import org.eclipse.swt.*
 import org.eclipse.swt.widgets.*
+import org.eclipse.swt.dnd.Clipboard
+import org.eclipse.swt.dnd.TextTransfer
+import org.eclipse.jface.dialogs.MessageDialog
 
 import net.liying.sourceCounter.*
 import net.liying.sourceCounter.plugin.views.base.BaseSourceCountResultView
@@ -31,9 +36,41 @@ class SourceCountResultView: BaseSourceCountResultView() {
 		}
 	}
 
+	// =========================================================================
+	private var parent: Composite? = null
+
+	private var clipboard: Clipboard? = null
+
+	override fun createPartControl(parent: Composite) {
+		super.createPartControl(parent)
+
+		this.parent = parent
+		this.clipboard = Clipboard(parent.display)
+
+		this.table.columns.forEach {
+			column -> column.addListener(SWT.Selection) {
+							event -> this.sortActionListener(event)
+						}
+		}
+
+		this.selectAllMenuItem.addListener(SWT.Selection) {
+							event -> this.selectAllActionListener(event)
+						}
+		this.copyMenuItem.addListener(SWT.Selection) {
+							event -> this.copyActionListener(event)
+						}
+		this.clearMenuItem.addListener(SWT.Selection) {
+							event -> this.clearActionListener(event)
+						}
+	}
+
+	// =========================================================================
+
 	private var resultList = mutableListOf<FileCountResult>()
 
 	private var total = CountResult(null, "")
+
+	// =========================================================================
 
 	fun showResult(resultList: List<FileCountResult>) {
 		this.resultList = resultList.toMutableList()
@@ -51,17 +88,12 @@ class SourceCountResultView: BaseSourceCountResultView() {
 		this.displayResult(true)
 	}
 
-	override fun createPartControl(parent: Composite) {
-		super.createPartControl(parent)
+	// =========================================================================
 
-		this.table.columns.forEach {
-			column -> column.addListener(SWT.Selection) {
-							event -> this.sortListener(event)
-						}
-		}
-	}
-
-	private fun sortListener(event: Event) {
+	/**
+	 * Listener for sort action
+	 */
+	private fun sortActionListener(event: Event) {
 		val clickedColumn = event.widget as TableColumn
 
 		if (this.table.sortColumn === clickedColumn) {
@@ -193,5 +225,51 @@ class SourceCountResultView: BaseSourceCountResultView() {
 				// Total
 				total.total.toString()
 			))
+	}
+
+	/**
+	 * Listener for selectAll action
+	 */
+	fun selectAllActionListener(event: Event) {
+		this.table.selectAll()
+	}
+
+	/**
+	 * Listener for copy action
+	 */
+	fun copyActionListener(event: Event) {
+		val columnCount = this.table.columnCount
+
+		var content = StringBuilder()
+
+		val columnArray = Array(columnCount) {
+			idx -> this.table.columns[idx].text
+		}
+		columnArray.joinTo(content, "\t")
+		content.append("\n")
+
+		this.table.selection.forEach {
+			tableItem ->
+				val textArray = Array(columnCount) {
+					idx -> tableItem.getText(idx)
+				}
+				textArray.joinTo(content, "\t")
+				content.append("\n")
+		}
+
+		val transfer = TextTransfer.getInstance()
+		this.clipboard?.setContents(arrayOf(content.toString()), arrayOf(transfer))
+	}
+
+	/**
+	 * Listener for copy action
+	 */
+	fun clearActionListener(event: Event) {
+		val confirmResult = MessageDialog.openConfirm(this.parent?.shell,
+				"Confirm", "Clear the count result?")
+		if (confirmResult) {
+			this.resultList.clear()
+			this.table.removeAll()
+		}
 	}
 }
