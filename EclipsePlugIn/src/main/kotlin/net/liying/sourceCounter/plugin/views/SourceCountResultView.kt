@@ -1,8 +1,8 @@
 package net.liying.sourceCounter.plugin.views
 
 import org.eclipse.ui.PlatformUI
-import org.eclipse.swt.SWT
-import org.eclipse.swt.widgets.TableItem
+import org.eclipse.swt.*
+import org.eclipse.swt.widgets.*
 
 import net.liying.sourceCounter.*
 import net.liying.sourceCounter.plugin.views.base.BaseSourceCountResultView
@@ -31,17 +31,109 @@ class SourceCountResultView: BaseSourceCountResultView() {
 		}
 	}
 
-	fun showResult(resultList: List<FileCountResult>) {
-		this.table.removeAll()
+	private var resultList = mutableListOf<FileCountResult>()
 
-		var total = CountResult(null, "")
+	private var total = CountResult(null, "")
+
+	fun showResult(resultList: List<FileCountResult>) {
+		this.resultList = resultList.toMutableList()
+
+		this.total = CountResult(null, "")
 		resultList.forEach {
 			result ->
+				total += result.countResult
+		}
+
+		this.table.sortColumn = this.resPathColumn
+		this.table.sortDirection = SWT.UP
+
+		this.sortResultList()
+		this.displayResult(true)
+	}
+
+	override fun createPartControl(parent: Composite) {
+		super.createPartControl(parent)
+
+		this.table.columns.forEach {
+			column -> column.addListener(SWT.Selection) {
+							event -> this.sortListener(event)
+						}
+		}
+	}
+
+	private fun sortListener(event: Event) {
+		val clickedColumn = event.widget as TableColumn
+
+		if (this.table.sortColumn === clickedColumn) {
+			this.table.sortDirection = when (this.table.sortDirection) {
+											SWT.UP -> SWT.DOWN
+											else -> SWT.UP
+										}
+		} else {
+			this.table.sortColumn = clickedColumn
+			this.table.sortDirection = SWT.UP
+		}
+
+		this.sortResultList()
+		this.displayResult(false)
+	}
+
+	private fun sortResultList() {
+		val sortColumn = this.table.sortColumn
+
+		val selector = { result: FileCountResult ->
+				when (sortColumn) {
+					this.nameColumn -> result.file.name
+
+					this.resPathColumn -> result.file.fullPath.toString()
+
+					this.filePathColumn -> result.countResult.file?.absolutePath
+
+					this.extensionColumn -> result.file.fullPath.fileExtension
+
+					this.typeColumn -> result.countResult.type
+
+					this.statementColumn -> this.getLineIntForSort(result.countResult.type, result.countResult.statement)
+
+					this.documentColumn -> this.getLineIntForSort(result.countResult.type, result.countResult.document)
+
+					this.commentColumn -> this.getLineIntForSort(result.countResult.type, result.countResult.comment)
+
+					this.emptyColumn -> this.getLineIntForSort(result.countResult.type, result.countResult.empty)
+
+					this.totalColumn -> this.getLineIntForSort(result.countResult.type, result.countResult.total)
+
+					else -> null
+				} as Comparable<Any>
+		}
+
+		if (this.table.sortDirection == SWT.UP)
+			this.resultList.sortBy(selector)
+		else
+			this.resultList.sortByDescending (selector)
+	}
+
+	private fun getLineIntForSort(type: String?, lineInt: Int): Int {
+		return if (type == Type.Unknown) -1 else lineInt
+	}
+
+	private fun displayResult(createFlag: Boolean) {
+		if (createFlag)
+			this.table.removeAll()
+		else
+			this.table.clearAll()
+
+		// =====================================================================
+		// show rows for all the count results
+		this.resultList.forEachIndexed {
+			idx, result ->
 				val file = result.file
 				val countResult = result.countResult
-				total += countResult
 
-				val item = TableItem(this.table, SWT.NONE)
+				val item = if (createFlag)
+							TableItem(this.table, SWT.NONE)
+						else
+							this.table.getItem(idx)
 
 				var textArray = arrayOf(
 						// Name
@@ -51,7 +143,7 @@ class SourceCountResultView: BaseSourceCountResultView() {
 						// File Path
 						countResult.file?.absolutePath,
 						// Extension
-						file.fullPath.getFileExtension(),
+						file.fullPath.fileExtension,
 						// Type
 						countResult.type)
 				if (countResult.type != Type.Unknown) {
@@ -72,7 +164,13 @@ class SourceCountResultView: BaseSourceCountResultView() {
 				item.setText(textArray)
 		}
 
-		val item = TableItem(this.table, SWT.NONE)
+		// =====================================================================
+		// show row for the summation
+		val item = if (createFlag)
+					TableItem(this.table, SWT.NONE)
+				else
+					this.table.getItem(this.resultList.size)
+
 		item.setText(arrayOf(
 				// Name
 				"Total",

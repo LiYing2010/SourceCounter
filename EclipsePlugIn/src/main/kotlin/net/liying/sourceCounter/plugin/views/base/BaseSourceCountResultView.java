@@ -1,81 +1,90 @@
 package net.liying.sourceCounter.plugin.views.base;
 
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.part.ViewPart;
-import org.eclipse.swt.widgets.Table;
 import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.jface.viewers.TableViewerColumn;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.ui.part.ViewPart;
 
 public class BaseSourceCountResultView extends ViewPart {
 	protected Table table;
+	protected TableColumn nameColumn;
+	protected TableColumn resPathColumn;
+	protected TableColumn filePathColumn;
+	protected TableColumn extensionColumn;
+	protected TableColumn typeColumn;
+	protected TableColumn statementColumn;
+	protected TableColumn documentColumn;
+	protected TableColumn commentColumn;
+	protected TableColumn emptyColumn;
+	protected TableColumn totalColumn;
 
 	public BaseSourceCountResultView() {
 	}
 
 	@Override
 	public void createPartControl(Composite parent) {
-
 		TableViewer tableViewer = new TableViewer(parent, SWT.BORDER | SWT.FULL_SELECTION);
 		table = tableViewer.getTable();
 		table.setLinesVisible(true);
 		table.setHeaderVisible(true);
 
 		TableViewerColumn tableViewerColumn_1 = new TableViewerColumn(tableViewer, SWT.NONE);
-		TableColumn tblclmnNewColumn_1 = tableViewerColumn_1.getColumn();
-		tblclmnNewColumn_1.setWidth(200);
-		tblclmnNewColumn_1.setText("Name");
+		nameColumn = tableViewerColumn_1.getColumn();
+		nameColumn.setWidth(200);
+		nameColumn.setText("Name");
 
 		TableViewerColumn tableViewerColumn_2 = new TableViewerColumn(tableViewer, SWT.NONE);
-		TableColumn tblclmnNewColumn_2 = tableViewerColumn_2.getColumn();
-		tblclmnNewColumn_2.setWidth(150);
-		tblclmnNewColumn_2.setText("Resource Path");
+		resPathColumn = tableViewerColumn_2.getColumn();
+		resPathColumn.setWidth(150);
+		resPathColumn.setText("Resource Path");
 
 		TableViewerColumn tableViewerColumn_3 = new TableViewerColumn(tableViewer, SWT.NONE);
-		TableColumn tblclmnNewColumn_3 = tableViewerColumn_3.getColumn();
-		tblclmnNewColumn_3.setWidth(150);
-		tblclmnNewColumn_3.setText("File Path");
+		filePathColumn = tableViewerColumn_3.getColumn();
+		filePathColumn.setWidth(150);
+		filePathColumn.setText("File Path");
 
 		TableViewerColumn tableViewerColumn_4 = new TableViewerColumn(tableViewer, SWT.NONE);
-		TableColumn tblclmnNewColumn_4 = tableViewerColumn_4.getColumn();
-		tblclmnNewColumn_4.setWidth(100);
-		tblclmnNewColumn_4.setText("Extension");
+		extensionColumn = tableViewerColumn_4.getColumn();
+		extensionColumn.setWidth(100);
+		extensionColumn.setText("Extension");
 
 		TableViewerColumn tableViewerColumn_5 = new TableViewerColumn(tableViewer, SWT.NONE);
-		TableColumn tblclmnNewColumn_5 = tableViewerColumn_5.getColumn();
-		tblclmnNewColumn_5.setWidth(100);
-		tblclmnNewColumn_5.setText("Type");
+		typeColumn = tableViewerColumn_5.getColumn();
+		typeColumn.setWidth(100);
+		typeColumn.setText("Type");
 
 		TableViewerColumn tableViewerColumn_6 = new TableViewerColumn(tableViewer, SWT.NONE);
-		TableColumn tblclmnNewColumn_6 = tableViewerColumn_6.getColumn();
-		tblclmnNewColumn_6.setAlignment(SWT.RIGHT);
-		tblclmnNewColumn_6.setWidth(100);
-		tblclmnNewColumn_6.setText("Statement");
+		statementColumn = tableViewerColumn_6.getColumn();
+		statementColumn.setAlignment(SWT.RIGHT);
+		statementColumn.setWidth(100);
+		statementColumn.setText("Statement");
 
 		TableViewerColumn tableViewerColumn_7 = new TableViewerColumn(tableViewer, SWT.NONE);
-		TableColumn tblclmnNewColumn_7 = tableViewerColumn_7.getColumn();
-		tblclmnNewColumn_7.setAlignment(SWT.RIGHT);
-		tblclmnNewColumn_7.setWidth(100);
-		tblclmnNewColumn_7.setText("Document");
+		documentColumn = tableViewerColumn_7.getColumn();
+		documentColumn.setAlignment(SWT.RIGHT);
+		documentColumn.setWidth(100);
+		documentColumn.setText("Document");
 
 		TableViewerColumn tableViewerColumn_8 = new TableViewerColumn(tableViewer, SWT.NONE);
-		TableColumn tblclmnNewColumn_8 = tableViewerColumn_8.getColumn();
-		tblclmnNewColumn_8.setAlignment(SWT.RIGHT);
-		tblclmnNewColumn_8.setWidth(100);
-		tblclmnNewColumn_8.setText("Comment");
+		commentColumn = tableViewerColumn_8.getColumn();
+		commentColumn.setAlignment(SWT.RIGHT);
+		commentColumn.setWidth(100);
+		commentColumn.setText("Comment");
 
 		TableViewerColumn tableViewerColumn_9 = new TableViewerColumn(tableViewer, SWT.NONE);
-		TableColumn tblclmnNewColumn_9 = tableViewerColumn_9.getColumn();
-		tblclmnNewColumn_9.setAlignment(SWT.RIGHT);
-		tblclmnNewColumn_9.setWidth(100);
-		tblclmnNewColumn_9.setText("Empty");
+		emptyColumn = tableViewerColumn_9.getColumn();
+		emptyColumn.setAlignment(SWT.RIGHT);
+		emptyColumn.setWidth(100);
+		emptyColumn.setText("Empty");
 
 		TableViewerColumn tableViewerColumn_10 = new TableViewerColumn(tableViewer, SWT.NONE);
-		TableColumn tblclmnNewColumn_10 = tableViewerColumn_10.getColumn();
-		tblclmnNewColumn_10.setAlignment(SWT.RIGHT);
-		tblclmnNewColumn_10.setWidth(100);
-		tblclmnNewColumn_10.setText("Total");
+		totalColumn = tableViewerColumn_10.getColumn();
+		totalColumn.setAlignment(SWT.RIGHT);
+		totalColumn.setWidth(100);
+		totalColumn.setText("Total");
 	}
 
 	@Override
