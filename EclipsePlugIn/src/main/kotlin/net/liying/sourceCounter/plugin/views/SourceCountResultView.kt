@@ -36,42 +36,6 @@ class SourceCountResultView: BaseSourceCountResultView() {
 		}
 	}
 
-	// =========================================================================
-	private var parent: Composite? = null
-
-	private var clipboard: Clipboard? = null
-
-	override fun createPartControl(parent: Composite) {
-		super.createPartControl(parent)
-
-		this.parent = parent
-		this.clipboard = Clipboard(parent.display)
-
-		this.table.columns.forEach {
-			column -> column.addListener(SWT.Selection) {
-							event -> this.sortActionListener(event)
-						}
-		}
-
-		this.selectAllMenuItem.addListener(SWT.Selection) {
-							event -> this.selectAllActionListener(event)
-						}
-		this.copyMenuItem.addListener(SWT.Selection) {
-							event -> this.copyActionListener(event)
-						}
-		this.clearMenuItem.addListener(SWT.Selection) {
-							event -> this.clearActionListener(event)
-						}
-	}
-
-	// =========================================================================
-
-	private var resultList = mutableListOf<FileCountResult>()
-
-	private var total = CountResult(null, "")
-
-	// =========================================================================
-
 	fun showResult(resultList: List<FileCountResult>) {
 		this.resultList = resultList.toMutableList()
 
@@ -87,6 +51,31 @@ class SourceCountResultView: BaseSourceCountResultView() {
 		this.sortResultList()
 		this.displayResult(true)
 	}
+
+	// =========================================================================
+	private var parent: Composite? = null
+
+	private var clipboard: Clipboard? = null
+
+	// =========================================================================
+	override fun createPartControl(parent: Composite) {
+		super.createPartControl(parent)
+
+		this.parent = parent
+		this.clipboard = Clipboard(parent.display)
+
+		this.table.columns.forEach {
+			column -> column.addListener(SWT.Selection) {
+							event -> this.sortActionListener(event)
+						}
+		}
+	}
+
+	// =========================================================================
+
+	private var resultList = mutableListOf<FileCountResult>()
+
+	private var total = CountResult(null, "")
 
 	// =========================================================================
 
@@ -227,17 +216,19 @@ class SourceCountResultView: BaseSourceCountResultView() {
 			))
 	}
 
+	// =========================================================================
+
 	/**
-	 * Listener for selectAll action
+	 * Handler for Select All action
 	 */
-	fun selectAllActionListener(event: Event) {
+	override fun runSelectAllAction() {
 		this.table.selectAll()
 	}
 
 	/**
-	 * Listener for copy action
+	 * Handler for Copy action
 	 */
-	fun copyActionListener(event: Event) {
+	override fun runCopyAction() {
 		val columnCount = this.table.columnCount
 
 		var content = StringBuilder()
@@ -262,9 +253,9 @@ class SourceCountResultView: BaseSourceCountResultView() {
 	}
 
 	/**
-	 * Listener for copy action
+	 * Handler for Clear action
 	 */
-	fun clearActionListener(event: Event) {
+	override fun runClearAction() {
 		val confirmResult = MessageDialog.openConfirm(this.parent?.shell,
 				"Confirm", "Clear the count result?")
 		if (confirmResult) {

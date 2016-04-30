@@ -1,16 +1,22 @@
 package net.liying.sourceCounter.plugin.views.base;
 
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
-import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.part.ViewPart;
+import org.eclipse.wb.swt.ResourceManager;
 
-public class BaseSourceCountResultView extends ViewPart {
+public abstract class BaseSourceCountResultView extends ViewPart {
+	protected TableViewer tableViewer;
 	protected Table table;
 	protected TableColumn nameColumn;
 	protected TableColumn resPathColumn;
@@ -22,16 +28,26 @@ public class BaseSourceCountResultView extends ViewPart {
 	protected TableColumn commentColumn;
 	protected TableColumn emptyColumn;
 	protected TableColumn totalColumn;
-	protected MenuItem copyMenuItem;
-	protected MenuItem clearMenuItem;
-	protected MenuItem selectAllMenuItem;
+	private Action selectAllAction;
+	private Action copyAction;
+	private Action clearAction;
 
 	public BaseSourceCountResultView() {
 	}
 
+	protected abstract void runSelectAllAction();
+
+	protected abstract void runClearAction();
+
+	protected abstract void runCopyAction();
+
 	@Override
 	public void createPartControl(Composite parent) {
-		TableViewer tableViewer = new TableViewer(parent, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI);
+		createActions();
+		initializeToolBar();
+		initializeMenu();
+
+		tableViewer = new TableViewer(parent, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI);
 		table = tableViewer.getTable();
 		table.setLinesVisible(true);
 		table.setHeaderVisible(true);
@@ -91,19 +107,76 @@ public class BaseSourceCountResultView extends ViewPart {
 		totalColumn.setWidth(100);
 		totalColumn.setText("Total");
 
-		Menu menu = new Menu(table);
-		table.setMenu(menu);
+		initializeTableContextMenu();
+	}
 
-		selectAllMenuItem = new MenuItem(menu, SWT.NONE);
-		selectAllMenuItem.setText("Select All");
+	/**
+	 * Create the actions.
+	 */
+	private void createActions() {
+		// Create the actions
+		{
+			selectAllAction = new Action("Select All") {
+				@Override
+				public void run() {
+					BaseSourceCountResultView.this.runSelectAllAction();
+				}
+			};
+			selectAllAction.setImageDescriptor(ResourceManager.getPluginImageDescriptor("SourceCounter", "images/buttons/select-all.png"));
+		}
+		{
+			copyAction = new Action("Copy") {
+				@Override
+				public void run() {
+					BaseSourceCountResultView.this.runCopyAction();
+				}
+			};
+			copyAction.setImageDescriptor(ResourceManager.getPluginImageDescriptor("org.eclipse.ui", "/icons/full/etool16/copy_edit.gif"));
+		}
+		{
+			clearAction = new Action("Clear") {
+				@Override
+				public void run() {
+					BaseSourceCountResultView.this.runClearAction();
+				}
+			};
+			clearAction.setImageDescriptor(ResourceManager.getPluginImageDescriptor("org.eclipse.ui", "/icons/full/etool16/delete.png"));
+		}
+	}
 
-		copyMenuItem = new MenuItem(menu, SWT.NONE);
-		copyMenuItem.setText("Copy");
+	/**
+	 * Initialize the toolbar.
+	 */
+	private void initializeToolBar() {
+		IToolBarManager toolbarManager = getViewSite().getActionBars().getToolBarManager();
+		toolbarManager.add(selectAllAction);
+		toolbarManager.add(copyAction);
+		toolbarManager.add(clearAction);
+	}
 
-		new MenuItem(menu, SWT.SEPARATOR);
+	/**
+	 * Initialize the menu.
+	 */
+	private void initializeMenu() {
+		IMenuManager menuManager = getViewSite().getActionBars().getMenuManager();
+		menuManager.add(selectAllAction);
+		menuManager.add(copyAction);
+		menuManager.add(new Separator());
+		menuManager.add(clearAction);
+	}
 
-		clearMenuItem = new MenuItem(menu, SWT.NONE);
-		clearMenuItem.setText("Clear");
+	/**
+	 * Initialize the context menu for table.
+	 */
+	private void initializeTableContextMenu() {
+		MenuManager menuManager = new MenuManager("#PopupMenu");
+		menuManager.add(selectAllAction);
+		menuManager.add(copyAction);
+		menuManager.add(new Separator());
+		menuManager.add(clearAction);
+
+		Menu menu = menuManager.createContextMenu(tableViewer.getControl());
+		tableViewer.getControl().setMenu(menu);
 	}
 
 	@Override
