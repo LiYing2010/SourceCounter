@@ -32,7 +32,7 @@
       </category>
       <view
             name="Source Count Result"
-            icon="icons/sample.gif"
+            icon="images/icons/source_count.png"
             category="net.liying.sourceCounter.plugin.views.SourceCountResult"
             class="net.liying.sourceCounter.plugin.views.SourceCountResultView"
             id="net.liying.sourceCounter.plugin.views.SourceCountResultView">
