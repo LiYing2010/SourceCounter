@@ -9,6 +9,8 @@ import org.eclipse.swt.dnd.Clipboard
 import org.eclipse.swt.dnd.TextTransfer
 import org.eclipse.jface.dialogs.MessageDialog
 
+import org.eclipse.ui.ide.IDE
+
 import net.liying.sourceCounter.*
 import net.liying.sourceCounter.plugin.views.base.BaseSourceCountResultView
 import net.liying.sourceCounter.plugin.FileCountResult
@@ -156,6 +158,8 @@ class SourceCountResultView: BaseSourceCountResultView() {
 						else
 							this.table.getItem(idx)
 
+				item.data = result
+
 				var textArray = arrayOf(
 						// Name
 						file.name,
@@ -192,6 +196,8 @@ class SourceCountResultView: BaseSourceCountResultView() {
 				else
 					this.table.getItem(this.resultList.size)
 
+		item.data = null
+
 		item.setText(arrayOf(
 				// Name
 				"Total",
@@ -217,6 +223,19 @@ class SourceCountResultView: BaseSourceCountResultView() {
 	}
 
 	// =========================================================================
+
+	/**
+	 * Handler for Open action
+	 */
+	override fun runOpenAction() {
+		val window = PlatformUI.getWorkbench().activeWorkbenchWindow
+		this.table.selection.forEach {
+			tableItem ->
+				val result = tableItem.data as FileCountResult?
+				if (result != null)
+					IDE.openEditor(window.activePage, result.file, true);
+		}
+	}
 
 	/**
 	 * Handler for Select All action

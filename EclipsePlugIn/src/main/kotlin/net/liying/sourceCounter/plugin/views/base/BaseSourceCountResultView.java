@@ -8,6 +8,8 @@ import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Table;
@@ -28,12 +30,15 @@ public abstract class BaseSourceCountResultView extends ViewPart {
 	protected TableColumn commentColumn;
 	protected TableColumn emptyColumn;
 	protected TableColumn totalColumn;
+	private Action openAction;
 	private Action selectAllAction;
 	private Action copyAction;
 	private Action clearAction;
 
 	public BaseSourceCountResultView() {
 	}
+
+	protected abstract void runOpenAction();
 
 	protected abstract void runSelectAllAction();
 
@@ -49,6 +54,12 @@ public abstract class BaseSourceCountResultView extends ViewPart {
 
 		tableViewer = new TableViewer(parent, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI);
 		table = tableViewer.getTable();
+		table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+				BaseSourceCountResultView.this.runOpenAction();
+			}
+		});
 		table.setLinesVisible(true);
 		table.setHeaderVisible(true);
 
@@ -116,13 +127,24 @@ public abstract class BaseSourceCountResultView extends ViewPart {
 	private void createActions() {
 		// Create the actions
 		{
+			openAction = new Action("Open") {
+				@Override
+				public void run() {
+					BaseSourceCountResultView.this.runOpenAction();
+				}
+			};
+			openAction.setImageDescriptor(
+					ResourceManager.getPluginImageDescriptor("SourceCounter", "images/buttons/open.gif"));
+		}
+		{
 			selectAllAction = new Action("Select All") {
 				@Override
 				public void run() {
 					BaseSourceCountResultView.this.runSelectAllAction();
 				}
 			};
-			selectAllAction.setImageDescriptor(ResourceManager.getPluginImageDescriptor("SourceCounter", "images/buttons/select-all.png"));
+			selectAllAction.setImageDescriptor(
+					ResourceManager.getPluginImageDescriptor("SourceCounter", "images/buttons/select-all.png"));
 		}
 		{
 			copyAction = new Action("Copy") {
@@ -131,7 +153,8 @@ public abstract class BaseSourceCountResultView extends ViewPart {
 					BaseSourceCountResultView.this.runCopyAction();
 				}
 			};
-			copyAction.setImageDescriptor(ResourceManager.getPluginImageDescriptor("org.eclipse.ui", "/icons/full/etool16/copy_edit.gif"));
+			copyAction.setImageDescriptor(
+					ResourceManager.getPluginImageDescriptor("org.eclipse.ui", "/icons/full/etool16/copy_edit.gif"));
 		}
 		{
 			clearAction = new Action("Clear") {
@@ -140,7 +163,8 @@ public abstract class BaseSourceCountResultView extends ViewPart {
 					BaseSourceCountResultView.this.runClearAction();
 				}
 			};
-			clearAction.setImageDescriptor(ResourceManager.getPluginImageDescriptor("org.eclipse.ui", "/icons/full/etool16/delete.png"));
+			clearAction.setImageDescriptor(
+					ResourceManager.getPluginImageDescriptor("org.eclipse.ui", "/icons/full/etool16/delete.png"));
 		}
 	}
 
@@ -149,6 +173,7 @@ public abstract class BaseSourceCountResultView extends ViewPart {
 	 */
 	private void initializeToolBar() {
 		IToolBarManager toolbarManager = getViewSite().getActionBars().getToolBarManager();
+		toolbarManager.add(openAction);
 		toolbarManager.add(selectAllAction);
 		toolbarManager.add(copyAction);
 		toolbarManager.add(clearAction);
@@ -159,6 +184,7 @@ public abstract class BaseSourceCountResultView extends ViewPart {
 	 */
 	private void initializeMenu() {
 		IMenuManager menuManager = getViewSite().getActionBars().getMenuManager();
+		menuManager.add(openAction);
 		menuManager.add(selectAllAction);
 		menuManager.add(copyAction);
 		menuManager.add(new Separator());
@@ -170,6 +196,7 @@ public abstract class BaseSourceCountResultView extends ViewPart {
 	 */
 	private void initializeTableContextMenu() {
 		MenuManager menuManager = new MenuManager("#PopupMenu");
+		menuManager.add(openAction);
 		menuManager.add(selectAllAction);
 		menuManager.add(copyAction);
 		menuManager.add(new Separator());
