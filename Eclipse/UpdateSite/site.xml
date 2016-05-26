@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
    <feature url="features/net.liying.SourceCounter_1.0.0.qualifier.jar" id="net.liying.SourceCounter" version="1.0.0.qualifier">
-      <category name="SourceCounter"/>
+      <category name="Source Counter"/>
    </feature>
-   <category-def name="SourceCounter" label="Source Counter"/>
+   <category-def name="Source Counter" label="Source Counter"/>
 </site>
