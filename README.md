@@ -2,6 +2,14 @@ This is a source counter tool which can count the lines of your source code.
 It can tell you that how many lines of statement/document/comment/empty in your source code files.
 
 
+Install
+===========
+Eclipse update site:
+
+   http://www.liying-cn.net/updateSite/
+
+
+
 Source File Supported
 ===========
 - Kotlin
