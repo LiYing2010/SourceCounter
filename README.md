@@ -14,10 +14,10 @@ Source File Supported
 ===========
 - Kotlin
 - Java
+- JavaScript
 - XML (TODO)
 - JSP (TODO)
 - CSS (TODO)
-- JavaScript (TODO)
 - properties (TODO)
 - Python (TODO)
 - Scala (TODO)
