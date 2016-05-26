@@ -14,6 +14,8 @@ class Extetion {
 		const val Kotlin = "kt"
 
 		const val JavaScript = "js"
+
+		const val XML = "xml"
 	}
 }
 
@@ -26,6 +28,8 @@ class Type {
 		const val Kotlin = "Kotlin"
 
 		const val JavaScript = "Java Script"
+
+		const val XML = "XML"
 	}
 }
 
@@ -148,6 +152,9 @@ fun buildSourceCounter(file: File, encoding: String = "UTF-8"): SourceCounter {
 
 		Extetion.JavaScript
 			-> SourceCounter(normalizedFile, Type.JavaScript, JavaScriptLexer(input))
+
+		Extetion.XML
+			-> SourceCounter(normalizedFile, Type.XML, XMLLexer(input))
 
 		else
 			-> SourceCounter(normalizedFile, Type.Unknown, null)
