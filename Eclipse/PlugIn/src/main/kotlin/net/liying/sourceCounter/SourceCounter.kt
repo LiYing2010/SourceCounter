@@ -181,5 +181,8 @@ private val fileTypeInfoList = listOf(
 					"Properties", "properties"),
 
 				FileTypeInfo({input -> CSharpLexer(input)},
-					"C#", "cs")
+					"C#", "cs"),
+
+				FileTypeInfo({input -> CSSLexer(input)},
+					"CSS", "css")
 			)
