@@ -194,5 +194,8 @@ private val fileTypeInfoList = listOf(
 					"CSS", "css"),
 
 				FileTypeInfo({input -> SQLLexer(input)},
-					"SQL", "sql")
+					"SQL", "sql"),
+
+				FileTypeInfo({input -> JSONLexer(input)},
+					"JSON", "json")
 			)

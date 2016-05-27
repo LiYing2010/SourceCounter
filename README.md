@@ -23,6 +23,7 @@ Source File Supported
 - SQL
 - HTML, XHTML
 - CSS
+- JSON
 - JSP (TODO)
 - Python (TODO)
 - Scala (TODO)
