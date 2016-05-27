@@ -1,0 +1,4 @@
+CommentStartWithNumberSign=1
+CommentStartWithExclamationMark=2
+Statement=3
+Whitespace=4

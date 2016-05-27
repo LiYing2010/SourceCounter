@@ -164,5 +164,9 @@ private val fileTypeInfoList = listOf(
 
 					FileTypeInfo("XHTML",
 									"xhtml",
-									{input -> XMLLexer(input)})
+									{input -> XMLLexer(input)}),
+
+					FileTypeInfo("Properties",
+									"properties",
+									{input -> PropertiesLexer(input)})
 				)

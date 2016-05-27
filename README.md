@@ -17,9 +17,9 @@ Source File Supported
 - Java Script
 - XML
 - HTML, XHTML
+- properties
 - JSP (TODO)
 - CSS (TODO)
-- properties (TODO)
 - Python (TODO)
 - Scala (TODO)
 - the others... (if you want to count some other source files, just tell me)
