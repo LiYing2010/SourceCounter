@@ -15,9 +15,10 @@ Source File Supported
 - Kotlin
 - Java
 - Java Script
-- XML
-- HTML, XHTML
 - properties
+- XML, XSLT, DTD, XSD, TLD
+- HTML, XHTML
+- MXML
 - JSP (TODO)
 - CSS (TODO)
 - Python (TODO)

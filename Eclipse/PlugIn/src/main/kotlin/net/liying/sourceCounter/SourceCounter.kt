@@ -169,7 +169,12 @@ private val fileTypeInfoList = listOf(
 								listOf(
 									FileTypeMapping("XML", "xml"),
 									FileTypeMapping("HTML", listOf("html", "htm")),
-									FileTypeMapping("XHTML", "xhtml")
+									FileTypeMapping("XHTML", "xhtml"),
+									FileTypeMapping("XSLT", listOf("xsl", "xslt")),
+									FileTypeMapping("DTD", "dtd"),
+									FileTypeMapping("XSD", "xsd"),
+									FileTypeMapping("TLD", "tld"),
+									FileTypeMapping("MXML", "mxml")
 								)),
 
 					FileTypeInfo({input -> PropertiesLexer(input)},
