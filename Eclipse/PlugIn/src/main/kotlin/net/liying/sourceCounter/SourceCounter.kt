@@ -156,5 +156,13 @@ private val fileTypeInfoList = listOf(
 
 					FileTypeInfo("XML",
 									"xml",
+									{input -> XMLLexer(input)}),
+
+					FileTypeInfo("HTML",
+									listOf("html", "htm"),
+									{input -> XMLLexer(input)}),
+
+					FileTypeInfo("XHTML",
+									"xhtml",
 									{input -> XMLLexer(input)})
 				)

@@ -16,7 +16,7 @@ Source File Supported
 - Java
 - Java Script
 - XML
-- HTML (TODO)
+- HTML, XHTML
 - JSP (TODO)
 - CSS (TODO)
 - properties (TODO)
