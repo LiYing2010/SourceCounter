@@ -191,5 +191,8 @@ private val fileTypeInfoList = listOf(
 					"C#", "cs"),
 
 				FileTypeInfo({input -> CSSLexer(input)},
-					"CSS", "css")
+					"CSS", "css"),
+
+				FileTypeInfo({input -> SQLLexer(input)},
+					"SQL", "sql")
 			)

@@ -1,0 +1,5 @@
+SingleLineComment=1
+MultiLineComment=2
+String=3
+Statement=4
+Whitespace=5
