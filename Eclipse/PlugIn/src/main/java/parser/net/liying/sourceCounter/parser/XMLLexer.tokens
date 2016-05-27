@@ -1,3 +1,5 @@
 Comment=1
-Statement=2
-Whitespace=3
+TagStart=2
+TagEnd=3
+Statement=4
+Whitespace=5

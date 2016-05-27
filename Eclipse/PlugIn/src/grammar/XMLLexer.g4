@@ -18,7 +18,7 @@ options {
 	// =========================================================================
 
 	public List<Integer> getStatementTokens() {
-		return Arrays.asList(Statement);
+		return Arrays.asList(TagStart, TagEnd, Statement);
 	}
 
 	public List<Integer> getDocumentTokens() {
@@ -42,6 +42,15 @@ Comment:
 ;
 
 // =============================================================================
+TagStart:
+	'<' .*? '>'
+;
+
+TagEnd:
+	('</' .+? '>')
+		|
+	('/>')
+;
 
 Statement:
 	~[\r\n'<!--']+
