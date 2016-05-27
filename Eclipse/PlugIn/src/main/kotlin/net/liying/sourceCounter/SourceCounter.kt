@@ -156,28 +156,30 @@ class FileTypeInfo(val lexerCreateFunc: (input : ANTLRInputStream) -> BaseLexer?
 }
 
 private val fileTypeInfoList = listOf(
-					FileTypeInfo({input -> KotlinLexer(input)},
-								"Kotlin", "kt"),
+				FileTypeInfo({input -> KotlinLexer(input)},
+					"Kotlin", "kt"),
 
-					FileTypeInfo({input -> JavaLexer(input)},
-								"Java", "java"),
+				FileTypeInfo({input -> JavaLexer(input)},
+					"Java", "java"),
 
-					FileTypeInfo({input -> JavaScriptLexer(input)},
-								"Java Script", "js"),
+				FileTypeInfo({input -> JavaScriptLexer(input)},
+					"Java Script", "js"),
 
-					FileTypeInfo({input -> XMLLexer(input)},
-								listOf(
-									FileTypeMapping("XML", "xml"),
-									FileTypeMapping("HTML", listOf("html", "htm")),
-									FileTypeMapping("XHTML", "xhtml"),
-									FileTypeMapping("XSLT", listOf("xsl", "xslt")),
-									FileTypeMapping("DTD", "dtd"),
-									FileTypeMapping("XSD", "xsd"),
-									FileTypeMapping("TLD", "tld"),
-									FileTypeMapping("MXML", "mxml")
-								)),
+				FileTypeInfo({input -> XMLLexer(input)},
+					listOf(
+						FileTypeMapping("XML", "xml"),
+						FileTypeMapping("HTML", listOf("html", "htm")),
+						FileTypeMapping("XHTML", "xhtml"),
+						FileTypeMapping("XSLT", listOf("xsl", "xslt")),
+						FileTypeMapping("DTD", "dtd"),
+						FileTypeMapping("XSD", "xsd"),
+						FileTypeMapping("TLD", "tld"),
+						FileTypeMapping("MXML", "mxml")
+					)),
 
-					FileTypeInfo({input -> PropertiesLexer(input)},
-								"Properties",
-								"properties")
-				)
+				FileTypeInfo({input -> PropertiesLexer(input)},
+					"Properties", "properties"),
+
+				FileTypeInfo({input -> CSharpLexer(input)},
+					"C#", "cs")
+			)

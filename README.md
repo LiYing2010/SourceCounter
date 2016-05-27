@@ -19,6 +19,7 @@ Source File Supported
 - XML, XSLT, DTD, XSD, TLD
 - HTML, XHTML
 - MXML
+- C#
 - JSP (TODO)
 - CSS (TODO)
 - Python (TODO)
