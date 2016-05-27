@@ -137,7 +137,7 @@ class SourceCountResultView: BaseSourceCountResultView() {
 	}
 
 	private fun getLineIntForSort(type: String?, lineInt: Int): Int {
-		return if (type == Type.Unknown) -1 else lineInt
+		return if (type == SourceCounter.Type_Unknown) -1 else lineInt
 	}
 
 	private fun displayResult(createFlag: Boolean) {
@@ -171,7 +171,7 @@ class SourceCountResultView: BaseSourceCountResultView() {
 						file.fullPath.fileExtension,
 						// Type
 						countResult.type)
-				if (countResult.type != Type.Unknown) {
+				if (countResult.type != SourceCounter.Type_Unknown) {
 					textArray += arrayOf(
 						// Statement
 						countResult.statement.toString(),

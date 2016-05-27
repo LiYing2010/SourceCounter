@@ -7,32 +7,6 @@ import net.liying.sourceCounter.parser.*
 
 import org.antlr.v4.runtime.*
 
-class Extetion {
-	companion object {
-		const val Java = "java"
-
-		const val Kotlin = "kt"
-
-		const val JavaScript = "js"
-
-		const val XML = "xml"
-	}
-}
-
-class Type {
-	companion object {
-		const val Unknown = "Unknown"
-
-		const val Java = "Java"
-
-		const val Kotlin = "Kotlin"
-
-		const val JavaScript = "Java Script"
-
-		const val XML = "XML"
-	}
-}
-
 class CountResult(val file: File?, val type: String?) {
 	var total: Int = 0;
 
@@ -76,6 +50,10 @@ class CountResult(val file: File?, val type: String?) {
 }
 
 class SourceCounter(val file: File, val type: String, val lexer: BaseLexer?) {
+	companion object {
+		const val Type_Unknown = "Unknown"
+	}
+
 	val countResult = CountResult(this.file, this.type)
 
 	fun count() {
@@ -138,25 +116,45 @@ fun buildSourceCounter(file: File, encoding: String = "UTF-8"): SourceCounter {
 	val normalizedFile = file.normalize()
 
 	val fileName = normalizedFile.absolutePath
-	val ext = fileName.substringAfterLast('.', "").toLowerCase()
+	val extension = fileName.substringAfterLast('.', "").toLowerCase()
 
-	val reader = InputStreamReader(FileInputStream(normalizedFile), encoding)
-	val input = ANTLRInputStream(reader)
+	fileTypeInfoList.forEach {
+		fileTypeInfo ->
+			if (fileTypeInfo.extentionList.contains(extension)) {
+				val reader = InputStreamReader(FileInputStream(normalizedFile), encoding)
+				val input = ANTLRInputStream(reader)
+				val lexer = fileTypeInfo.lexerCreateFunc(input)
 
-	return when (ext) {
-		Extetion.Java
-			-> SourceCounter(normalizedFile, Type.Java, JavaLexer(input))
-
-		Extetion.Kotlin
-			-> SourceCounter(normalizedFile, Type.Kotlin, KotlinLexer(input))
-
-		Extetion.JavaScript
-			-> SourceCounter(normalizedFile, Type.JavaScript, JavaScriptLexer(input))
-
-		Extetion.XML
-			-> SourceCounter(normalizedFile, Type.XML, XMLLexer(input))
-
-		else
-			-> SourceCounter(normalizedFile, Type.Unknown, null)
+				return SourceCounter(normalizedFile, fileTypeInfo.typeName, lexer)
+			}
 	}
+
+	return SourceCounter(normalizedFile, SourceCounter.Type_Unknown, null)
 }
+
+// =============================================================================
+
+class FileTypeInfo(val typeName: String, val extentionList: List<String>,
+		val lexerCreateFunc: (input : ANTLRInputStream) -> BaseLexer?) {
+	constructor(typeName: String, extention: String,
+			lexerCreateFunc: (input : ANTLRInputStream) -> BaseLexer?):
+				this(typeName, listOf(extention), lexerCreateFunc)
+}
+
+private val fileTypeInfoList = listOf(
+					FileTypeInfo("Kotlin",
+									"kt",
+									{input -> KotlinLexer(input)}),
+
+					FileTypeInfo("Java",
+									"java",
+									{input -> JavaLexer(input)}),
+
+					FileTypeInfo("Java Script",
+									"js",
+									{input -> JavaScriptLexer(input)}),
+
+					FileTypeInfo("XML",
+									"xml",
+									{input -> XMLLexer(input)})
+				)
