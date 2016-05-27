@@ -165,6 +165,13 @@ private val fileTypeInfoList = listOf(
 				FileTypeInfo({input -> JavaScriptLexer(input)},
 					"Java Script", "js"),
 
+				FileTypeInfo({input -> CLexer(input)},
+					listOf(
+						FileTypeMapping("C/C++", listOf("c", "cc", "cp", "cpp", "cxx", "c++")),
+						FileTypeMapping("C/C++ Header", listOf("h", "hpp")),
+						FileTypeMapping("Objective-C", listOf("m", "mm"))
+					)),
+
 				FileTypeInfo({input -> XMLLexer(input)},
 					listOf(
 						FileTypeMapping("XML", "xml"),

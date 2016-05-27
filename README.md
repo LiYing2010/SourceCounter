@@ -18,6 +18,7 @@ Source File Supported
 - properties
 - XML, XSLT, DTD, XSD, TLD
 - MXML
+- C/C++/Objective-C
 - C#
 - HTML, XHTML
 - CSS
