@@ -197,5 +197,8 @@ private val fileTypeInfoList = listOf(
 					"SQL", "sql"),
 
 				FileTypeInfo({input -> JSONLexer(input)},
-					"JSON", "json")
+					"JSON", "json"),
+
+				FileTypeInfo({input -> YAMLLexer(input)},
+					"YAML", listOf("yaml", "yml"))
 			)

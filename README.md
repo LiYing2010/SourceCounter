@@ -24,6 +24,7 @@ Source File Supported
 - HTML, XHTML
 - CSS
 - JSON
+- YAML
 - JSP (TODO)
 - Python (TODO)
 - Scala (TODO)
