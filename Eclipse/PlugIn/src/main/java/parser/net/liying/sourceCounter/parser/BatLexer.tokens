@@ -1,0 +1,4 @@
+CommentStartWithREM=1
+CommentStartWithDoubleColon=2
+Statement=3
+Whitespace=4

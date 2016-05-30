@@ -28,6 +28,7 @@ Source File Supported
 - JSON
 - YAML
 - INI
+- BAT, CMD
 - JSP (TODO)
 - Python (TODO)
 - Scala (TODO)

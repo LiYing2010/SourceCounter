@@ -95,5 +95,8 @@ internal val fileTypeInfoList = listOf(
 					mapByName("Make File", "makefile")),
 
 				FileTypeInfo({input -> INILexer(input)},
-					"INI", "ini")
+					"INI", "ini"),
+
+				FileTypeInfo({input -> BatLexer(input)},
+					"DOS Batch/Windows Command File", listOf("bat", "btm", "cmd"))
 			)
