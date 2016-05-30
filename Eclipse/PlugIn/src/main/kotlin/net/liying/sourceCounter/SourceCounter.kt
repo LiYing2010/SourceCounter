@@ -136,14 +136,21 @@ fun buildSourceCounter(file: File, encoding: String = "UTF-8"): SourceCounter {
 // =============================================================================
 class FileTypeMapping(val typeName: String,
 		val fileName: String?,
-		val extentionList: List<String>) {
-	constructor(typeName: String, extentionList: List<String>): this(typeName, null, extentionList)
-
-	constructor(typeName: String, extention: String): this(typeName, null, listOf(extention))
-
+		val extentionList: List<String>?) {
 	fun match(fileName: String, extention: String): Boolean
-			= (this.fileName == fileName) || this.extentionList.contains(extention)
+			= (this.fileName == fileName)
+			||
+				(this.extentionList != null && this.extentionList.contains(extention))
 }
+
+fun map(typeName: String, extention: String) : FileTypeMapping
+	= FileTypeMapping(typeName, null, listOf(extention))
+
+fun map(typeName: String, extentionList: List<String>) : FileTypeMapping
+	= FileTypeMapping(typeName, null, extentionList)
+
+fun mapByName(typeName: String, fileName: String) : FileTypeMapping
+	= FileTypeMapping(typeName, fileName, null)
 
 class FileTypeInfo(val lexerCreateFunc: (input : ANTLRInputStream) -> BaseLexer?,
 		val mappingList: List<FileTypeMapping>) {
@@ -153,12 +160,14 @@ class FileTypeInfo(val lexerCreateFunc: (input : ANTLRInputStream) -> BaseLexer?
 
 	constructor(lexerCreateFunc: (input : ANTLRInputStream) -> BaseLexer?,
 			typeName: String, extentionList: List<String>):
-				this(lexerCreateFunc, FileTypeMapping(typeName, null, extentionList))
+				this(lexerCreateFunc, map(typeName, extentionList))
 
 	constructor(lexerCreateFunc: (input : ANTLRInputStream) -> BaseLexer?,
 			typeName: String, extention: String):
-				this(lexerCreateFunc, FileTypeMapping(typeName, extention))
+				this(lexerCreateFunc, map(typeName, extention))
 }
+
+// =============================================================================
 
 private val fileTypeInfoList = listOf(
 				FileTypeInfo({input -> KotlinLexer(input)},
@@ -172,21 +181,21 @@ private val fileTypeInfoList = listOf(
 
 				FileTypeInfo({input -> CLexer(input)},
 					listOf(
-						FileTypeMapping("C/C++", listOf("c", "cc", "cp", "cpp", "cxx", "c++")),
-						FileTypeMapping("C/C++ Header", listOf("h", "hpp")),
-						FileTypeMapping("Objective-C", listOf("m", "mm"))
+						map("C/C++", listOf("c", "cc", "cp", "cpp", "cxx", "c++")),
+						map("C/C++ Header", listOf("h", "hpp")),
+						map("Objective-C", listOf("m", "mm"))
 					)),
 
 				FileTypeInfo({input -> XMLLexer(input)},
 					listOf(
-						FileTypeMapping("XML", "xml"),
-						FileTypeMapping("HTML", listOf("html", "htm")),
-						FileTypeMapping("XHTML", "xhtml"),
-						FileTypeMapping("XSLT", listOf("xsl", "xslt")),
-						FileTypeMapping("DTD", "dtd"),
-						FileTypeMapping("XSD", "xsd"),
-						FileTypeMapping("TLD", "tld"),
-						FileTypeMapping("MXML", "mxml")
+						map("XML", "xml"),
+						map("HTML", listOf("html", "htm")),
+						map("XHTML", "xhtml"),
+						map("XSLT", listOf("xsl", "xslt")),
+						map("DTD", "dtd"),
+						map("XSD", "xsd"),
+						map("TLD", "tld"),
+						map("MXML", "mxml")
 					)),
 
 				FileTypeInfo({input -> PropertiesLexer(input)},
@@ -211,5 +220,5 @@ private val fileTypeInfoList = listOf(
 					"Shell Script", "sh"),
 
 				FileTypeInfo({input -> MakeFileLexer(input)},
-					FileTypeMapping("Make File", "makefile", emptyList<String>()))
+					mapByName("Make File", "makefile"))
 			)
