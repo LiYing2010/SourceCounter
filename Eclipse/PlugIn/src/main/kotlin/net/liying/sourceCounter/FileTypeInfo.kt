@@ -92,5 +92,8 @@ internal val fileTypeInfoList = listOf(
 					"Shell Script", "sh"),
 
 				FileTypeInfo({input -> MakeFileLexer(input)},
-					mapByName("Make File", "makefile"))
+					mapByName("Make File", "makefile")),
+
+				FileTypeInfo({input -> INILexer(input)},
+					"INI", "ini")
 			)

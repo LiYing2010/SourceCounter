@@ -23,10 +23,11 @@ Source File Supported
 - SQL
 - HTML, XHTML
 - CSS
-- JSON
-- YAML
 - Shell Script
 - Makefile
+- JSON
+- YAML
+- INI
 - JSP (TODO)
 - Python (TODO)
 - Scala (TODO)
