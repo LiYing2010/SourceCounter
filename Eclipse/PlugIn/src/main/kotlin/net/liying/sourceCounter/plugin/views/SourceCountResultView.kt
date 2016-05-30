@@ -11,6 +11,8 @@ import org.eclipse.jface.dialogs.MessageDialog
 
 import org.eclipse.ui.ide.IDE
 
+import org.eclipse.core.resources.*
+
 import net.liying.sourceCounter.*
 import net.liying.sourceCounter.plugin.views.base.BaseSourceCountResultView
 import net.liying.sourceCounter.plugin.FileCountResult
@@ -51,7 +53,8 @@ class SourceCountResultView: BaseSourceCountResultView() {
 		this.table.sortDirection = SWT.UP
 
 		this.sortResultList()
-		this.displayResult(true)
+		this.displayResultTable(true)
+		this.displayResultTree()
 	}
 
 	// =========================================================================
@@ -98,7 +101,7 @@ class SourceCountResultView: BaseSourceCountResultView() {
 		}
 
 		this.sortResultList()
-		this.displayResult(false)
+		this.displayResultTable(false)
 	}
 
 	private fun sortResultList() {
@@ -140,7 +143,7 @@ class SourceCountResultView: BaseSourceCountResultView() {
 		return if (type == SourceCounter.Type_Unknown) -1 else lineInt
 	}
 
-	private fun displayResult(createFlag: Boolean) {
+	private fun displayResultTable(createFlag: Boolean) {
 		if (createFlag)
 			this.table.removeAll()
 		else
@@ -220,6 +223,45 @@ class SourceCountResultView: BaseSourceCountResultView() {
 				// Total
 				total.total.toString()
 			))
+	}
+
+	// =========================================================================
+
+	private val treeItemMap = mutableMapOf<IResource, TreeItem>()
+
+	private fun displayResultTree() {
+		this.treeItemMap.clear()
+
+		this.tree.removeAll()
+
+		this.resultList.forEach {
+			result ->
+				val treeItem = this.createTreeItem(result.file.getParent())
+
+				treeItem.data = result
+		}
+	}
+
+	private fun createTreeItem(resource: IResource): TreeItem {
+		var treeItem = this.treeItemMap.get(resource)
+		if (treeItem != null) {
+			return treeItem
+		}
+
+		val parent = resource.parent
+		treeItem =
+			if (parent != null && !(parent is IWorkspaceRoot)) {
+				val parentItem = this.createTreeItem(parent)
+				TreeItem(parentItem, SWT.NONE)
+			} else {
+				TreeItem(this.tree, SWT.NONE)
+			}
+
+		treeItem.setText(resource.name)
+
+		this.treeItemMap.put(resource, treeItem)
+
+		return treeItem
 	}
 
 	// =========================================================================

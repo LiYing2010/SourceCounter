@@ -16,6 +16,9 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.wb.swt.ResourceManager;
+import org.eclipse.swt.widgets.TabFolder;
+import org.eclipse.swt.widgets.TabItem;
+import org.eclipse.swt.widgets.Tree;
 
 public abstract class BaseSourceCountResultView extends ViewPart {
 	protected TableViewer tableViewer;
@@ -34,6 +37,10 @@ public abstract class BaseSourceCountResultView extends ViewPart {
 	private Action selectAllAction;
 	private Action copyAction;
 	private Action clearAction;
+	private TabFolder tabFolder;
+	private TabItem tabItemTable;
+	private TabItem tabItemChart;
+	protected Tree tree;
 
 	public BaseSourceCountResultView() {
 	}
@@ -52,8 +59,14 @@ public abstract class BaseSourceCountResultView extends ViewPart {
 		initializeToolBar();
 		initializeMenu();
 
-		tableViewer = new TableViewer(parent, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI);
+		tabFolder = new TabFolder(parent, SWT.NONE);
+
+		tabItemTable = new TabItem(tabFolder, SWT.NONE);
+		tabItemTable.setText("Table");
+
+		tableViewer = new TableViewer(tabFolder, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI);
 		table = tableViewer.getTable();
+		tabItemTable.setControl(table);
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
@@ -117,6 +130,12 @@ public abstract class BaseSourceCountResultView extends ViewPart {
 		totalColumn.setAlignment(SWT.RIGHT);
 		totalColumn.setWidth(100);
 		totalColumn.setText("Total");
+
+		tabItemChart = new TabItem(tabFolder, SWT.NONE);
+		tabItemChart.setText("Chart");
+
+		tree = new Tree(tabFolder, SWT.BORDER);
+		tabItemChart.setControl(tree);
 
 		initializeTableContextMenu();
 	}
