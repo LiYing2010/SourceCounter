@@ -1,0 +1,12 @@
+SingleLineCommentForJava=1
+MultiLineCommentForJava=2
+CommentForXML=3
+CommentForScript=4
+ScriptStart=5
+ScriptEnd=6
+XMLTagStart=7
+XMLTagEnd=8
+Statement=9
+Whitespace=10
+'<%'=5
+'%>'=6

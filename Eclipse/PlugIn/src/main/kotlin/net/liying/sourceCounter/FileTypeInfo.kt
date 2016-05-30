@@ -48,6 +48,9 @@ internal val fileTypeInfoList = listOf(
 				FileTypeInfo({input -> JavaLexer(input)},
 					"Java", "java"),
 
+				FileTypeInfo({input -> JSPLexer(input)},
+					"JSP", "jsp"),
+
 				FileTypeInfo({input -> JavaScriptLexer(input)},
 					"Java Script", "js"),
 

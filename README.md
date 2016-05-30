@@ -15,21 +15,21 @@ Source File Supported
 - Kotlin
 - Java
 - Java Script
-- properties
+- JSP
+- HTML, XHTML
 - XML, XSLT, DTD, XSD, TLD
+- CSS
+- properties
 - MXML
 - C, C++, Objective-C
 - C#
 - SQL
-- HTML, XHTML
-- CSS
 - Shell Script
 - Makefile
 - JSON
 - YAML
 - INI
 - BAT, CMD
-- JSP (TODO)
 - Python (TODO)
 - Scala (TODO)
 - the others... (if you want to count some other source files, just tell me)
