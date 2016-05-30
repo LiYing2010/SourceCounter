@@ -26,6 +26,7 @@ Source File Supported
 - JSON
 - YAML
 - Shell Script
+- Makefile
 - JSP (TODO)
 - Python (TODO)
 - Scala (TODO)

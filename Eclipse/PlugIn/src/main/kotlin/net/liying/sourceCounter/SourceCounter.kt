@@ -115,20 +115,18 @@ class SourceCounter(val file: File, val type: String, val lexer: BaseLexer?) {
 fun buildSourceCounter(file: File, encoding: String = "UTF-8"): SourceCounter {
 	val normalizedFile = file.normalize()
 
-	val fileName = normalizedFile.absolutePath
-	val extension = fileName.substringAfterLast('.', "").toLowerCase()
+	val fileName = normalizedFile.name
+	val extension = normalizedFile.extension
 
 	fileTypeInfoList.forEach {
 		fileTypeInfo ->
-			fileTypeInfo.mappingList.forEach {
-				mapping ->
-					if (mapping.extentionList.contains(extension)) {
-						val reader = InputStreamReader(FileInputStream(normalizedFile), encoding)
-						val input = ANTLRInputStream(reader)
-						val lexer = fileTypeInfo.lexerCreateFunc(input)
+			val mapping = fileTypeInfo.mappingList.find { it.match(fileName, extension) }
+			if (mapping != null) {
+				val reader = InputStreamReader(FileInputStream(normalizedFile), encoding)
+				val input = ANTLRInputStream(reader)
+				val lexer = fileTypeInfo.lexerCreateFunc(input)
 
-						return SourceCounter(normalizedFile, mapping.typeName, lexer)
-					}
+				return SourceCounter(normalizedFile, mapping.typeName, lexer)
 			}
 	}
 
@@ -136,8 +134,15 @@ fun buildSourceCounter(file: File, encoding: String = "UTF-8"): SourceCounter {
 }
 
 // =============================================================================
-class FileTypeMapping(val typeName: String, val extentionList: List<String>) {
-	constructor(typeName: String, extention: String): this(typeName, listOf(extention))
+class FileTypeMapping(val typeName: String,
+		val fileName: String?,
+		val extentionList: List<String>) {
+	constructor(typeName: String, extentionList: List<String>): this(typeName, null, extentionList)
+
+	constructor(typeName: String, extention: String): this(typeName, null, listOf(extention))
+
+	fun match(fileName: String, extention: String): Boolean
+			= (this.fileName == fileName) || this.extentionList.contains(extention)
 }
 
 class FileTypeInfo(val lexerCreateFunc: (input : ANTLRInputStream) -> BaseLexer?,
@@ -148,7 +153,7 @@ class FileTypeInfo(val lexerCreateFunc: (input : ANTLRInputStream) -> BaseLexer?
 
 	constructor(lexerCreateFunc: (input : ANTLRInputStream) -> BaseLexer?,
 			typeName: String, extentionList: List<String>):
-				this(lexerCreateFunc, FileTypeMapping(typeName, extentionList))
+				this(lexerCreateFunc, FileTypeMapping(typeName, null, extentionList))
 
 	constructor(lexerCreateFunc: (input : ANTLRInputStream) -> BaseLexer?,
 			typeName: String, extention: String):
@@ -203,5 +208,8 @@ private val fileTypeInfoList = listOf(
 					"YAML", listOf("yaml", "yml")),
 
 				FileTypeInfo({input -> ShellLexer(input)},
-					"Shell Script", listOf("sh"))
+					"Shell Script", "sh"),
+
+				FileTypeInfo({input -> MakeFileLexer(input)},
+					FileTypeMapping("Make File", "makefile", emptyList<String>()))
 			)
