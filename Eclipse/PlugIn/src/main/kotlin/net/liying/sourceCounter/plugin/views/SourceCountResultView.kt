@@ -1,17 +1,8 @@
 package net.liying.sourceCounter.plugin.views
 
-import java.lang.StringBuilder
-
 import org.eclipse.ui.PlatformUI
-import org.eclipse.swt.*
-import org.eclipse.swt.widgets.*
-import org.eclipse.swt.dnd.Clipboard
-import org.eclipse.swt.dnd.TextTransfer
-import org.eclipse.jface.dialogs.MessageDialog
+import org.eclipse.swt.widgets.Composite
 
-import org.eclipse.core.resources.*
-
-import net.liying.sourceCounter.*
 import net.liying.sourceCounter.plugin.views.base.BaseSourceCountResultView
 import net.liying.sourceCounter.plugin.FileCountResult
 
@@ -39,58 +30,17 @@ class SourceCountResultView: BaseSourceCountResultView() {
 	}
 
 	fun showResult(resultList: List<FileCountResult>) {
-		(this.sourceCountResultTable as SourceCountResultTable).showResult(resultList)
+		(this.resultTable as SourceCountResultTable).showResult(resultList)
 
-		this.resultList = resultList.toMutableList()
-
-		this.displayResultTree()
+		(this.resultChart as SourceCountResultChart).showResult(resultList)
 	}
-
-	// =========================================================================
-	private var resultList = mutableListOf<FileCountResult>()
-
 
 	// =========================================================================
 
 	override fun createResultTableCompsite(parent: Composite, style: Int)
 		= SourceCountResultTable(parent, style)
 
-	// =========================================================================
+	override fun createResultChartCompsite(parent: Composite, style: Int)
+		= SourceCountResultChart(parent, style)
 
-	private val treeItemMap = mutableMapOf<IResource, TreeItem>()
-
-	private fun displayResultTree() {
-		this.treeItemMap.clear()
-
-		this.tree.removeAll()
-
-		this.resultList.forEach {
-			result ->
-				val treeItem = this.createTreeItem(result.file.getParent())
-
-				treeItem.data = result
-		}
-	}
-
-	private fun createTreeItem(resource: IResource): TreeItem {
-		var treeItem = this.treeItemMap.get(resource)
-		if (treeItem != null) {
-			return treeItem
-		}
-
-		val parent = resource.parent
-		treeItem =
-			if (parent != null && !(parent is IWorkspaceRoot)) {
-				val parentItem = this.createTreeItem(parent)
-				TreeItem(parentItem, SWT.NONE)
-			} else {
-				TreeItem(this.tree, SWT.NONE)
-			}
-
-		treeItem.setText(resource.name)
-
-		this.treeItemMap.put(resource, treeItem)
-
-		return treeItem
-	}
 }

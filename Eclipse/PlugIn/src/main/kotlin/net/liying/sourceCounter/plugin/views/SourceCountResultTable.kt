@@ -8,7 +8,6 @@ import org.eclipse.swt.dnd.TextTransfer
 import org.eclipse.ui.PlatformUI
 import org.eclipse.ui.ide.IDE
 
-
 import net.liying.sourceCounter.*
 import net.liying.sourceCounter.plugin.views.base.BaseSourceCountResultTable
 import net.liying.sourceCounter.plugin.FileCountResult

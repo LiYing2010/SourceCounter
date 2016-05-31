@@ -4,12 +4,11 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
-import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.part.ViewPart;
 
 public abstract class BaseSourceCountResultView extends ViewPart {
-	protected BaseSourceCountResultTable sourceCountResultTable;
-	protected Tree tree;
+	protected BaseSourceCountResultTable resultTable;
+	protected BaseSourceCountResultChart resultChart;
 
 	public BaseSourceCountResultView() {
 	}
@@ -21,18 +20,22 @@ public abstract class BaseSourceCountResultView extends ViewPart {
 		TabItem tabItemTable = new TabItem(tabFolder, SWT.NONE);
 		tabItemTable.setText("Table");
 
-		sourceCountResultTable = createResultTableCompsite(tabFolder, SWT.NONE);
-		tabItemTable.setControl(sourceCountResultTable);
+		resultTable = createResultTableCompsite(tabFolder, SWT.NONE);
+		tabItemTable.setControl(resultTable);
 
 		TabItem tabItemChart = new TabItem(tabFolder, SWT.NONE);
 		tabItemChart.setText("Chart");
 
-		tree = new Tree(tabFolder, SWT.BORDER);
-		tabItemChart.setControl(tree);
+		resultChart = createResultChartCompsite(tabFolder, SWT.NONE);
+		tabItemChart.setControl(resultChart);
 	}
 
 	protected BaseSourceCountResultTable createResultTableCompsite(Composite parent, int style) {
 		return new BaseSourceCountResultTable(parent, style);
+	}
+
+	protected BaseSourceCountResultChart createResultChartCompsite(Composite parent, int style) {
+		return new BaseSourceCountResultChart(parent, style);
 	}
 
 	@Override
