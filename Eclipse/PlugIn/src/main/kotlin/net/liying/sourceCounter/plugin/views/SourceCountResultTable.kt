@@ -84,7 +84,7 @@ class SourceCountResultTable(parent: Composite, style: Int): BaseSourceCountResu
 
 					this.filePathColumn -> result.countResult.file?.absolutePath
 
-					this.extensionColumn -> result.file.fullPath.fileExtension
+					this.extensionColumn -> result.file.fullPath.fileExtension ?: ""
 
 					this.typeColumn -> result.countResult.type
 
