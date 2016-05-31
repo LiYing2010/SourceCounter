@@ -133,11 +133,17 @@ class SourceCountResultChart(parent: Composite, style: Int): BaseSourceCountResu
 		val valueTransform = {
 			result: FileCountResult -> result.countResult.statement
 		}
+		// group by type
 		val groupedList = descendantResultList.groupBy(keySelector, valueTransform)
 
+		// sort by type
+		val sortedList = groupedList.toList().sortedBy {
+			pair -> pair.first
+		}
+
 		val pieDataSet = DefaultPieDataset();
-		groupedList.forEach {
-			entry -> pieDataSet.setValue(entry.key, entry.value.sum())
+		sortedList.forEach {
+			pair -> pieDataSet.setValue(pair.first, pair.second.sum())
 		}
 
 		this.showPieChart("Count by Type", this.chartDisplay_CountByType, pieDataSet)
