@@ -5,6 +5,8 @@ import org.eclipse.swt.widgets.*
 
 import org.eclipse.core.resources.*
 
+import org.eclipse.wb.swt.ResourceManager
+
 import net.liying.sourceCounter.plugin.views.base.BaseSourceCountResultChart
 import net.liying.sourceCounter.plugin.FileCountResult
 
@@ -12,6 +14,12 @@ class SourceCountResultChart(parent: Composite, style: Int): BaseSourceCountResu
 	private var resultList = mutableListOf<FileCountResult>()
 
 	private val treeItemMap = mutableMapOf<IResource, TreeItem>()
+
+	val imageProject = ResourceManager.getPluginImageDescriptor(
+			"SourceCounter", "images/icons/project.gif").createImage()
+
+	val imageFolder = ResourceManager.getPluginImageDescriptor(
+			"SourceCounter", "images/icons/folder.gif").createImage()
 
 	// =========================================================================
 
@@ -50,6 +58,11 @@ class SourceCountResultChart(parent: Composite, style: Int): BaseSourceCountResu
 			}
 
 		treeItem.setText(resource.name)
+
+		when (resource) {
+			is IProject -> treeItem.setImage(0, this.imageProject)
+			is IFolder -> treeItem.setImage(0, this.imageFolder)
+		}
 
 		this.treeItemMap.put(resource, treeItem)
 
