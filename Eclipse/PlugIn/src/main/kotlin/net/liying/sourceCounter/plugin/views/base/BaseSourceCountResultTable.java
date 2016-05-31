@@ -3,6 +3,7 @@ package net.liying.sourceCounter.plugin.views.base;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
@@ -16,7 +17,6 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.ToolBar;
-import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.wb.swt.ResourceManager;
 
 public class BaseSourceCountResultTable extends Composite {
@@ -39,29 +39,25 @@ public class BaseSourceCountResultTable extends Composite {
 	private Action clearAction;
 
 	private ToolBar toolBar;
-	private ToolItem tltmNewItem;
-	private ToolItem tltmNewItem_1;
-	private ToolItem tltmNewItem_2;
-	private ToolItem tltmNewItem_3;
 
 	protected void initUI() {
-		// do nothing
+		// do nothing here, implemented in sub-class
 	}
 
 	protected void runOpenAction() {
-		// do nothing
+		// do nothing here, implemented in sub-class
 	}
 
 	protected void runSelectAllAction() {
-		// do nothing
+		// do nothing here, implemented in sub-class
 	}
 
 	protected void runClearAction() {
-		// do nothing
+		// do nothing here, implemented in sub-class
 	}
 
 	protected void runCopyAction() {
-		// do nothing
+		// do nothing here, implemented in sub-class
 	}
 
 	/**
@@ -74,9 +70,9 @@ public class BaseSourceCountResultTable extends Composite {
 		super(parent, SWT.NONE);
 		setLayout(new FormLayout());
 
-		toolBar = new ToolBar(this, SWT.FLAT | SWT.RIGHT);
+		toolBar = new ToolBar(this, SWT.FLAT | SWT.WRAP | SWT.RIGHT);
 		FormData fd_toolBar = new FormData();
-		fd_toolBar.bottom = new FormAttachment(0, 20);
+		fd_toolBar.bottom = new FormAttachment(0, 22);
 		fd_toolBar.right = new FormAttachment(100);
 		fd_toolBar.top = new FormAttachment(0);
 		fd_toolBar.left = new FormAttachment(0);
@@ -86,18 +82,6 @@ public class BaseSourceCountResultTable extends Composite {
 		table = tableViewer.getTable();
 		FormData fd_table = new FormData();
 		fd_table.top = new FormAttachment(toolBar, 4);
-
-		tltmNewItem = new ToolItem(toolBar, SWT.NONE);
-		tltmNewItem.setText("New Item");
-
-		tltmNewItem_1 = new ToolItem(toolBar, SWT.NONE);
-		tltmNewItem_1.setText("New Item");
-
-		tltmNewItem_2 = new ToolItem(toolBar, SWT.NONE);
-		tltmNewItem_2.setText("New Item");
-
-		tltmNewItem_3 = new ToolItem(toolBar, SWT.NONE);
-		tltmNewItem_3.setText("New Item");
 		fd_table.bottom = new FormAttachment(100);
 		fd_table.right = new FormAttachment(100);
 		fd_table.left = new FormAttachment(0);
@@ -169,11 +153,9 @@ public class BaseSourceCountResultTable extends Composite {
 		totalColumn.setWidth(100);
 		totalColumn.setText("Total");
 
-		createActions();
-
-		initializeToolBar();
-		initializeMenu();
-		initializeTableContextMenu();
+		this.createActions();
+		this.initToolBar();
+		this.initTableContextMenu();
 
 		this.initUI();
 	}
@@ -233,42 +215,30 @@ public class BaseSourceCountResultTable extends Composite {
 	/**
 	 * Initialize the toolbar.
 	 */
-	private void initializeToolBar() {
-		// TODO
-		// IToolBarManager toolbarManager =
-		// getViewSite().getActionBars().getToolBarManager();
-		// toolbarManager.add(openAction);
-		// toolbarManager.add(selectAllAction);
-		// toolbarManager.add(copyAction);
-		// toolbarManager.add(clearAction);
-	}
+	private void initToolBar() {
+		ToolBarManager manager = new ToolBarManager(this.toolBar);
+		manager.add(openAction);
+		manager.add(selectAllAction);
+		manager.add(copyAction);
+		manager.add(new Separator());
+		manager.add(clearAction);
+		manager.update(true);
 
-	/**
-	 * Initialize the menu.
-	 */
-	private void initializeMenu() {
-		// TODO
-		// IMenuManager menuManager =
-		// getViewSite().getActionBars().getMenuManager();
-		// menuManager.add(openAction);
-		// menuManager.add(selectAllAction);
-		// menuManager.add(copyAction);
-		// menuManager.add(new Separator());
-		// menuManager.add(clearAction);
+		this.toolBar.pack();
 	}
 
 	/**
 	 * Initialize the context menu for table.
 	 */
-	private void initializeTableContextMenu() {
-		MenuManager menuManager = new MenuManager("#PopupMenu");
-		menuManager.add(openAction);
-		menuManager.add(selectAllAction);
-		menuManager.add(copyAction);
-		menuManager.add(new Separator());
-		menuManager.add(clearAction);
+	private void initTableContextMenu() {
+		MenuManager manager = new MenuManager("#PopupMenu");
+		manager.add(openAction);
+		manager.add(selectAllAction);
+		manager.add(copyAction);
+		manager.add(new Separator());
+		manager.add(clearAction);
 
-		Menu menu = menuManager.createContextMenu(table);
+		Menu menu = manager.createContextMenu(table);
 		table.setMenu(menu);
 	}
 }
