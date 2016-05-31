@@ -2,11 +2,19 @@ package net.liying.sourceCounter.plugin.views
 
 import org.eclipse.swt.*
 import org.eclipse.swt.events.SelectionEvent
+import org.eclipse.swt.layout.GridData
 import org.eclipse.swt.widgets.*
 
 import org.eclipse.core.resources.*
 
 import org.eclipse.wb.swt.ResourceManager
+
+import org.jfree.chart.ChartFactory
+import org.jfree.chart.plot.PiePlot3D
+import org.jfree.data.general.DefaultPieDataset
+import org.jfree.data.general.PieDataset
+import org.jfree.experimental.chart.swt.ChartComposite
+import org.jfree.util.Rotation
 
 import net.liying.sourceCounter.plugin.views.base.BaseSourceCountResultChart
 import net.liying.sourceCounter.plugin.FileCountResult
@@ -40,6 +48,9 @@ class SourceCountResultChart(parent: Composite, style: Int): BaseSourceCountResu
 		this.treeItemMap.clear()
 
 		this.tree.removeAll()
+
+		this.removeAllWidgets(this.chartDisplay_CountByPath)
+		this.removeAllWidgets(this.chartDisplay_CountByType)
 
 		this.resultList.forEach {
 			result -> this.createTreeItem(result.file.getParent())
@@ -91,22 +102,25 @@ class SourceCountResultChart(parent: Composite, style: Int): BaseSourceCountResu
 	}
 
 	private fun countByPath(treeItem: TreeItem) {
+		val pieDataSet = DefaultPieDataset();
+
 		treeItem.items.forEach {
 			childItem ->
 				val childResource = childItem.data as IContainer
 				val descendantResultList = this.allDescendantResultList(childResource)
 				val statementSum = this.statementSum(descendantResultList)
 
-				// TODO
-				println("Path: ${childItem.text}: ${statementSum}")
+				pieDataSet.setValue(childResource.name, statementSum)
 		}
 
 		val resource = treeItem.data as IContainer
 		val descendantResultList = this.directDescendantResultList(resource)
-		val statementSum = this.statementSum(descendantResultList)
+		if (descendantResultList.isNotEmpty()) {
+			val statementSum = this.statementSum(descendantResultList)
+			pieDataSet.setValue("[${resource.name}]", statementSum)
+		}
 
-		// TODO
-		println("Path: .: ${statementSum}")
+		this.showPieChart("Count by Path", this.chartDisplay_CountByPath, pieDataSet)
 	}
 
 	private fun countByType(treeItem: TreeItem) {
@@ -120,14 +134,36 @@ class SourceCountResultChart(parent: Composite, style: Int): BaseSourceCountResu
 			result: FileCountResult -> result.countResult.statement
 		}
 		val groupedList = descendantResultList.groupBy(keySelector, valueTransform)
-		val groupedSum = groupedList.mapValues {
-			entry -> entry.value.sum()
+
+		val pieDataSet = DefaultPieDataset();
+		groupedList.forEach {
+			entry -> pieDataSet.setValue(entry.key, entry.value.sum())
 		}
 
-		// TODO
-		groupedSum.forEach {
-			entry -> println("${entry.key}: ${entry.value}")
+		this.showPieChart("Count by Type", this.chartDisplay_CountByType, pieDataSet)
+	}
+
+	private fun removeAllWidgets(parentComposite: Composite) {
+		parentComposite.children.forEach {
+			control -> control.dispose()
 		}
+	}
+
+	private fun showPieChart(title: String, parentComposite: Composite, pieDataSet: PieDataset) {
+		this.removeAllWidgets(parentComposite)
+
+		val chart = ChartFactory.createPieChart3D(title, pieDataSet)
+
+		val plot = chart.plot as PiePlot3D
+		plot.startAngle = 290.0
+		plot.direction = Rotation.CLOCKWISE
+		plot.foregroundAlpha = 0.5f
+
+		val chartComposite = ChartComposite(parentComposite, SWT.NONE, chart, true)
+		val gridData = GridData(SWT.FILL, SWT.FILL, true, true);
+		chartComposite.setLayoutData(gridData);
+
+		parentComposite.layout(true)
 	}
 
 	private fun isAncestor(descendant: IResource, ancestor: IContainer): Boolean

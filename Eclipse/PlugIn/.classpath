@@ -6,5 +6,8 @@
 	<classpathentry kind="con" path="org.jetbrains.kotlin.core.KOTLIN_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="lib" path="lib/antlr-runtime-4.5.3.jar" sourcepath="lib/antlr4-4.5.3.zip"/>
+	<classpathentry kind="lib" path="lib/runtime/jcommon-1.0.23.jar"/>
+	<classpathentry kind="lib" path="lib/runtime/jfreechart-1.0.19-swt.jar" sourcepath="lib/source/jfreechart-src-1.0.19.zip"/>
+	<classpathentry kind="lib" path="lib/runtime/jfreechart-1.0.19.jar" sourcepath="lib/source/jfreechart-src-1.0.19.zip"/>
 	<classpathentry kind="output" path="var/classes"/>
 </classpath>
