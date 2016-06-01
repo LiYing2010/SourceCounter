@@ -1,6 +1,6 @@
 package net.liying.sourceCounter.plugin.views
 
-import org.eclipse.ui.PlatformUI
+import org.eclipse.ui.IWorkbenchPartSite
 import org.eclipse.swt.widgets.Composite
 
 import net.liying.sourceCounter.plugin.views.base.*
@@ -13,11 +13,11 @@ class SourceCountResultView: BaseSourceCountResultView() {
 		 */
 		private const val ID = "net.liying.sourceCounter.plugin.views.SourceCountResultView"
 
-		fun showView(): SourceCountResultView? {
-			val activePage = PlatformUI.getWorkbench().activeWorkbenchWindow.activePage
-			activePage.showView(ID)
+		fun showView(site: IWorkbenchPartSite): SourceCountResultView? {
+			val page = site.page
+			page.showView(ID)
 
-			activePage.viewReferences.forEach {
+			page.viewReferences.forEach {
 				viewRef ->
 					val view = viewRef.getView(false)
 					if (view is SourceCountResultView) {
