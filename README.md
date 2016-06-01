@@ -30,6 +30,7 @@ Source File Supported
 - YAML
 - INI
 - BAT, CMD
+- Text
 - Python (TODO)
 - Scala (TODO)
 - the others... (if you want to count some other source files, just tell me)

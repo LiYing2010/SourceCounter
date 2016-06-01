@@ -101,5 +101,8 @@ internal val fileTypeInfoList = listOf(
 					"INI", "ini"),
 
 				FileTypeInfo({input -> BatLexer(input)},
-					"DOS Batch/Windows Command File", listOf("bat", "btm", "cmd"))
+					"DOS Batch/Windows Command File", listOf("bat", "btm", "cmd")),
+
+				FileTypeInfo({input -> TextLexer(input)},
+					"Text", "txt")
 			)
