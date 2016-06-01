@@ -3,7 +3,7 @@ package net.liying.sourceCounter.plugin.views
 import org.eclipse.ui.PlatformUI
 import org.eclipse.swt.widgets.Composite
 
-import net.liying.sourceCounter.plugin.views.base.BaseSourceCountResultView
+import net.liying.sourceCounter.plugin.views.base.*
 import net.liying.sourceCounter.plugin.FileCountResult
 
 class SourceCountResultView: BaseSourceCountResultView() {
@@ -30,17 +30,25 @@ class SourceCountResultView: BaseSourceCountResultView() {
 	}
 
 	fun showResult(resultList: List<FileCountResult>) {
-		(this.resultTable as SourceCountResultTable).showResult(resultList)
+		this.resultTable?.showResult(resultList)
 
-		(this.resultChart as SourceCountResultChart).showResult(resultList)
+		this.resultChart?.showResult(resultList)
 	}
 
 	// =========================================================================
+	private var resultTable: SourceCountResultTable? = null
 
-	override fun createResultTableCompsite(parent: Composite, style: Int)
-		= SourceCountResultTable(parent, style)
+	private var resultChart: SourceCountResultChart? = null
 
-	override fun createResultChartCompsite(parent: Composite, style: Int)
-		= SourceCountResultChart(parent, style)
+	override fun createResultTableCompsite(parent: Composite, style: Int): BaseSourceCountResultTable? {
+		this.resultTable = SourceCountResultTable(parent, style)
 
+		return this.resultTable
+	}
+
+	override fun createResultChartCompsite(parent: Composite, style: Int): BaseSourceCountResultChart? {
+		this.resultChart = SourceCountResultChart(parent, style)
+
+		return this.resultChart
+	}
 }

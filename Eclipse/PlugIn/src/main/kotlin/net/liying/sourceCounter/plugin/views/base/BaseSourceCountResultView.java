@@ -7,9 +7,6 @@ import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.ui.part.ViewPart;
 
 public abstract class BaseSourceCountResultView extends ViewPart {
-	protected BaseSourceCountResultTable resultTable;
-	protected BaseSourceCountResultChart resultChart;
-
 	public BaseSourceCountResultView() {
 	}
 
@@ -20,13 +17,13 @@ public abstract class BaseSourceCountResultView extends ViewPart {
 		TabItem tabItemTable = new TabItem(tabFolder, SWT.NONE);
 		tabItemTable.setText("Table");
 
-		resultTable = createResultTableCompsite(tabFolder, SWT.NONE);
+		BaseSourceCountResultTable resultTable = createResultTableCompsite(tabFolder, SWT.NONE);
 		tabItemTable.setControl(resultTable);
 
 		TabItem tabItemChart = new TabItem(tabFolder, SWT.NONE);
 		tabItemChart.setText("Chart");
 
-		resultChart = createResultChartCompsite(tabFolder, SWT.NONE);
+		BaseSourceCountResultChart resultChart = createResultChartCompsite(tabFolder, SWT.NONE);
 		tabItemChart.setControl(resultChart);
 	}
 
