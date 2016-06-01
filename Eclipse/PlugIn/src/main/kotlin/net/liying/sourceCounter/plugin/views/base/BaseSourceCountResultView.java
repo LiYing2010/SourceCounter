@@ -1,9 +1,9 @@
 package net.liying.sourceCounter.plugin.views.base;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CTabFolder;
+import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.TabFolder;
-import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.ui.part.ViewPart;
 
 public abstract class BaseSourceCountResultView extends ViewPart {
@@ -12,15 +12,15 @@ public abstract class BaseSourceCountResultView extends ViewPart {
 
 	@Override
 	public void createPartControl(Composite parent) {
-		TabFolder tabFolder = new TabFolder(parent, SWT.NONE);
+		CTabFolder tabFolder = new CTabFolder(parent, SWT.BORDER);
 
-		TabItem tabItemTable = new TabItem(tabFolder, SWT.NONE);
+		CTabItem tabItemTable = new CTabItem(tabFolder, SWT.NONE);
 		tabItemTable.setText("Table");
 
 		BaseSourceCountResultTable resultTable = createResultTableCompsite(tabFolder, SWT.NONE);
 		tabItemTable.setControl(resultTable);
 
-		TabItem tabItemChart = new TabItem(tabFolder, SWT.NONE);
+		CTabItem tabItemChart = new CTabItem(tabFolder, SWT.NONE);
 		tabItemChart.setText("Chart");
 
 		BaseSourceCountResultChart resultChart = createResultChartCompsite(tabFolder, SWT.NONE);
