@@ -12,7 +12,8 @@ public abstract class BaseSourceCountResultView extends ViewPart {
 
 	@Override
 	public void createPartControl(Composite parent) {
-		CTabFolder tabFolder = new CTabFolder(parent, SWT.BORDER);
+		CTabFolder tabFolder = new CTabFolder(parent, SWT.FLAT);
+		tabFolder.setSimple(false);
 
 		CTabItem tabItemTable = new CTabItem(tabFolder, SWT.NONE);
 		tabItemTable.setText("Table");
@@ -25,6 +26,8 @@ public abstract class BaseSourceCountResultView extends ViewPart {
 
 		BaseSourceCountResultChart resultChart = createResultChartCompsite(tabFolder, SWT.NONE);
 		tabItemChart.setControl(resultChart);
+
+		tabFolder.setSelection(0);
 	}
 
 	protected BaseSourceCountResultTable createResultTableCompsite(Composite parent, int style) {

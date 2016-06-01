@@ -10,9 +10,11 @@ import org.eclipse.core.resources.*
 import org.eclipse.wb.swt.ResourceManager
 
 import org.jfree.chart.ChartFactory
+import org.jfree.chart.JFreeChart
 import org.jfree.chart.plot.PiePlot3D
 import org.jfree.data.general.DefaultPieDataset
 import org.jfree.data.general.PieDataset
+import org.jfree.data.category.DefaultCategoryDataset
 import org.jfree.experimental.chart.swt.ChartComposite
 import org.jfree.util.Rotation
 
@@ -47,10 +49,9 @@ class SourceCountResultChart(parent: Composite, style: Int): BaseSourceCountResu
 	private fun displayResultTree() {
 		this.treeItemMap.clear()
 
-		this.tree.removeAll()
+		this.clearChart()
 
-		this.removeAllWidgets(this.chartDisplay_CountByPath)
-		this.removeAllWidgets(this.chartDisplay_CountByType)
+		this.tree.removeAll()
 
 		this.resultList.forEach {
 			result -> this.createTreeItem(result.file.getParent())
@@ -86,7 +87,9 @@ class SourceCountResultChart(parent: Composite, style: Int): BaseSourceCountResu
 		return treeItem
 	}
 
-	override fun treeSelectionListener(e: SelectionEvent) {
+	override fun showChart() {
+		this.clearChart()
+
 		val treeItem = this.tree.selection.getOrNull(0)
 
 		if (treeItem == null) {
@@ -96,13 +99,44 @@ class SourceCountResultChart(parent: Composite, style: Int): BaseSourceCountResu
 		this.countByTreeItem(treeItem)
 	}
 
-	private fun countByTreeItem(treeItem: TreeItem) {
-		this.countByPath(treeItem)
-		this.countByType(treeItem)
+	private fun clearChart() {
+		this.removeAllWidgets(this.chartDisplayComposite)
+	}
+	private fun removeAllWidgets(parentComposite: Composite) {
+		parentComposite.children.forEach {
+			control -> control.dispose()
+		}
 	}
 
-	private fun countByPath(treeItem: TreeItem) {
-		val pieDataSet = DefaultPieDataset();
+	private fun countByTreeItem(treeItem: TreeItem) {
+		var title: String
+		val categoryName: String
+		var dataSet: Map<String, Int>
+
+		if (this.radioBtnCountByPath.selection) {
+			title = "Count by Path"
+			categoryName = "Path"
+			dataSet = this.countByPath(treeItem)
+		}
+		else {
+			title = "Count by Type"
+			categoryName = "Type"
+			dataSet = this.countByType(treeItem)
+		}
+
+		var chart = if (this.radioBtnPieChart.selection) {
+						this.createPieChart(title, dataSet)
+					}
+					else {
+						this.createBarChart(title, categoryName, dataSet)
+					}
+		this.displayChartWidget(chart)
+	}
+
+	// =========================================================================
+
+	private fun countByPath(treeItem: TreeItem): Map<String, Int> {
+		val dataSet = linkedMapOf<String, Int>()
 
 		treeItem.items.forEach {
 			childItem ->
@@ -110,20 +144,20 @@ class SourceCountResultChart(parent: Composite, style: Int): BaseSourceCountResu
 				val descendantResultList = this.allDescendantResultList(childResource)
 				val statementSum = this.statementSum(descendantResultList)
 
-				pieDataSet.setValue(childResource.name, statementSum)
+				dataSet.put(childResource.name, statementSum)
 		}
 
 		val resource = treeItem.data as IContainer
 		val descendantResultList = this.directDescendantResultList(resource)
 		if (descendantResultList.isNotEmpty()) {
 			val statementSum = this.statementSum(descendantResultList)
-			pieDataSet.setValue("[${resource.name}]", statementSum)
+			dataSet.put("[${resource.name}]", statementSum)
 		}
 
-		this.showPieChart("Count by Path", this.chartDisplay_CountByPath, pieDataSet)
+		return dataSet
 	}
 
-	private fun countByType(treeItem: TreeItem) {
+	private fun countByType(treeItem: TreeItem): Map<String, Int> {
 		val resource = treeItem.data as IContainer
 		val descendantResultList = this.allDescendantResultList(resource)
 
@@ -141,36 +175,14 @@ class SourceCountResultChart(parent: Composite, style: Int): BaseSourceCountResu
 			pair -> pair.first
 		}
 
-		val pieDataSet = DefaultPieDataset();
+		val dataSet = linkedMapOf<String, Int>()
 		sortedList.forEach {
-			pair -> pieDataSet.setValue(pair.first, pair.second.sum())
+			pair -> dataSet.put(pair.first ?: "", pair.second.sum())
 		}
 
-		this.showPieChart("Count by Type", this.chartDisplay_CountByType, pieDataSet)
+		return dataSet
 	}
 
-	private fun removeAllWidgets(parentComposite: Composite) {
-		parentComposite.children.forEach {
-			control -> control.dispose()
-		}
-	}
-
-	private fun showPieChart(title: String, parentComposite: Composite, pieDataSet: PieDataset) {
-		this.removeAllWidgets(parentComposite)
-
-		val chart = ChartFactory.createPieChart3D(title, pieDataSet)
-
-		val plot = chart.plot as PiePlot3D
-		plot.startAngle = 290.0
-		plot.direction = Rotation.CLOCKWISE
-		plot.foregroundAlpha = 0.5f
-
-		val chartComposite = ChartComposite(parentComposite, SWT.NONE, chart, true)
-		val gridData = GridData(SWT.FILL, SWT.FILL, true, true);
-		chartComposite.setLayoutData(gridData);
-
-		parentComposite.layout(true)
-	}
 
 	private fun isAncestor(descendant: IResource, ancestor: IContainer): Boolean
 		= when (descendant.parent) {
@@ -191,4 +203,45 @@ class SourceCountResultChart(parent: Composite, style: Int): BaseSourceCountResu
 
 	private fun statementSum(resultList: List<FileCountResult>): Int
 		= resultList.sumBy { result -> result.countResult.statement }
+
+	// =========================================================================
+
+	private fun createPieChart(title: String, dataSet: Map<String, Int>): JFreeChart {
+		val pieDataSet = DefaultPieDataset();
+
+		dataSet.forEach {
+			entry -> pieDataSet.setValue(entry.key, entry.value)
+		}
+
+		val chart = ChartFactory.createPieChart3D(title, pieDataSet)
+
+		val plot = chart.plot as PiePlot3D
+		plot.startAngle = 290.0
+		plot.direction = Rotation.CLOCKWISE
+		plot.foregroundAlpha = 0.5f
+
+		return chart
+	}
+
+	private fun createBarChart(title: String, categoryName: String,
+			dataSet: Map<String, Int>): JFreeChart {
+		val categoryDataset = DefaultCategoryDataset();
+
+		dataSet.forEach {
+			entry -> categoryDataset.addValue(entry.value, entry.key, "Statement")
+		}
+
+		val chart = ChartFactory.createBarChart(title, categoryName, "Line Count",
+				categoryDataset)
+
+		return chart
+	}
+
+	private fun displayChartWidget(chart: JFreeChart) {
+		val chartComposite = ChartComposite(this.chartDisplayComposite, SWT.NONE, chart, true)
+		val gridData = GridData(SWT.FILL, SWT.FILL, true, true);
+		chartComposite.setLayoutData(gridData);
+
+		this.chartDisplayComposite.layout(true)
+	}
 }
