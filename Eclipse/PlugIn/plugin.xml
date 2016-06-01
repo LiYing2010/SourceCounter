@@ -9,9 +9,10 @@
             id="SourceCounter.contribution1"
             objectClass="org.eclipse.core.resources.IResource">
          <menu
+               icon="images/icons/source_count.png"
+               id="SourceCounter.menu"
                label="Source Counter"
-               path="additions"
-               id="SourceCounter.menu">
+               path="additions">
             <separator
                   name="count">
             </separator>
