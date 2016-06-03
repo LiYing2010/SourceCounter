@@ -198,7 +198,7 @@ public class BaseSourceCountResultTable extends Composite {
 				}
 			};
 			copyAction.setImageDescriptor(
-					ResourceManager.getPluginImageDescriptor("org.eclipse.ui", "/icons/full/etool16/copy_edit.gif"));
+					ResourceManager.getPluginImageDescriptor("SourceCounter", "images/buttons/copy.png"));
 		}
 		{
 			clearAction = new Action("Clear") {
@@ -208,7 +208,7 @@ public class BaseSourceCountResultTable extends Composite {
 				}
 			};
 			clearAction.setImageDescriptor(
-					ResourceManager.getPluginImageDescriptor("org.eclipse.ui", "/icons/full/etool16/delete.png"));
+					ResourceManager.getPluginImageDescriptor("SourceCounter", "images/buttons/delete.png"));
 		}
 	}
 
