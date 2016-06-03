@@ -6,15 +6,17 @@
       provider-name="Li Ying">
 
    <description url="https://github.com/LiYing2010/SourceCounter">
-      [Enter Feature Description here.]
+      Source counter tool which can count the lines of your source code.
+Support Kotlin, Java, Java Script, XML, CSS, and many others.
    </description>
 
-   <copyright url="http://www.example.com/copyright">
-      [Enter Copyright Description here.]
+   <copyright url="https://github.com/LiYing2010/SourceCounter">
+      Copyright (c)2016 by LiYing &lt;liying.cn.2010@gmail.com&gt;.
+All rights reserved.
    </copyright>
 
-   <license url="http://www.example.com/license">
-      [Enter License Description here.]
+   <license url="https://www.eclipse.org/legal/epl-v10.html">
+      Copyright (c)2016 LiYing &lt;liying.cn.2010@gmail.com&gt;, licensed under the Eclipse Public License 1.0. &lt;https://www.eclipse.org/legal/epl-v10.html&gt;
    </license>
 
    <plugin
