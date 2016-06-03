@@ -40,11 +40,25 @@ Feature
 ===========
 - There is an Eclipse plug-in so you can count source code from the Eclipse IDE
 
-You can select source folders, Java packages, source files, and then select "Source Counter" => "Count" from the popup menu:
+You can select one or more source folder(s), Java package(s), source file(s), and then select "Source Counter" => "Count" from the popup menu:
 
 <img src="/doc/img/popupMenu.png" style="width: 400px;" title="Popup menu" />
 
 The count result will be shown in the Source Count Result View:
 
-<img src="/doc/img/countResultView.png" style="width: 600px;" title="Source Count Result View" />
+You can check the count result in the table mode:
+<img src="/doc/img/countResult_Table.png" style="width: 600px;" title="Source Count Result View" />
 
+Or in the Chart mode:
+
+(1)Count by Type:
+<img src="/doc/img/countResult_Chart_ByType.png" style="width: 600px;" title="Source Count Result View" />
+
+(2)Count by Path:
+<img src="/doc/img/countResult_Chart_ByPath.png" style="width: 600px;" title="Source Count Result View" />
+
+(3)View as Pie Chart:
+<img src="/doc/img/countResult_Chart_AsPie.png" style="width: 600px;" title="Source Count Result View" />
+
+(4)View as Bar Chart:
+<img src="/doc/img/countResult_Chart_AsBar.png" style="width: 600px;" title="Source Count Result View" />
