@@ -2,6 +2,11 @@ This is a source counter tool which can count the lines of your source code.
 It can tell you that how many lines of statement/document/comment/empty in your source code files.
 
 
+Current version
+===========
+v1.5.0 released at 2016/06/03
+
+
 Install
 ===========
 Eclipse update site:
