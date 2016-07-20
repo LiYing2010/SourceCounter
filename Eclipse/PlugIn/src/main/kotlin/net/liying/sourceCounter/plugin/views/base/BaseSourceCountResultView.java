@@ -6,7 +6,13 @@ import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
 
-public abstract class BaseSourceCountResultView extends ViewPart {
+import net.liying.sourceCounter.plugin.views.SourceCountResultChart;
+import net.liying.sourceCounter.plugin.views.SourceCountResultTable;
+
+public class BaseSourceCountResultView extends ViewPart {
+	protected SourceCountResultTable resultTable;
+	protected SourceCountResultChart resultChart;
+
 	public BaseSourceCountResultView() {
 	}
 
@@ -18,24 +24,16 @@ public abstract class BaseSourceCountResultView extends ViewPart {
 		CTabItem tabItemTable = new CTabItem(tabFolder, SWT.NONE);
 		tabItemTable.setText("Table");
 
-		BaseSourceCountResultTable resultTable = createResultTableCompsite(tabFolder, SWT.NONE);
+		resultTable = new SourceCountResultTable(tabFolder, SWT.NONE);
 		tabItemTable.setControl(resultTable);
 
 		CTabItem tabItemChart = new CTabItem(tabFolder, SWT.NONE);
 		tabItemChart.setText("Chart");
 
-		BaseSourceCountResultChart resultChart = createResultChartCompsite(tabFolder, SWT.NONE);
+		resultChart = new SourceCountResultChart(tabFolder, SWT.NONE);
 		tabItemChart.setControl(resultChart);
 
 		tabFolder.setSelection(0);
-	}
-
-	protected BaseSourceCountResultTable createResultTableCompsite(Composite parent, int style) {
-		return new BaseSourceCountResultTable(parent, style);
-	}
-
-	protected BaseSourceCountResultChart createResultChartCompsite(Composite parent, int style) {
-		return new BaseSourceCountResultChart(parent, style);
 	}
 
 	@Override

@@ -30,25 +30,8 @@ class SourceCountResultView: BaseSourceCountResultView() {
 	}
 
 	fun showResult(resultList: List<FileCountResult>) {
-		this.resultTable?.showResult(resultList)
+		this.resultTable.showResult(resultList)
 
-		this.resultChart?.showResult(resultList)
-	}
-
-	// =========================================================================
-	private var resultTable: SourceCountResultTable? = null
-
-	private var resultChart: SourceCountResultChart? = null
-
-	override fun createResultTableCompsite(parent: Composite, style: Int): BaseSourceCountResultTable? {
-		this.resultTable = SourceCountResultTable(parent, style)
-
-		return this.resultTable
-	}
-
-	override fun createResultChartCompsite(parent: Composite, style: Int): BaseSourceCountResultChart? {
-		this.resultChart = SourceCountResultChart(parent, style)
-
-		return this.resultChart
+		this.resultChart.showResult(resultList)
 	}
 }
