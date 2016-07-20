@@ -1,13 +1,10 @@
 package net.liying.sourceCounter.plugin.views
 
 import org.eclipse.swt.*
-import org.eclipse.swt.events.SelectionEvent
 import org.eclipse.swt.layout.GridData
 import org.eclipse.swt.widgets.*
 
 import org.eclipse.core.resources.*
-
-import org.eclipse.wb.swt.ResourceManager
 
 import org.jfree.chart.ChartFactory
 import org.jfree.chart.JFreeChart
@@ -21,76 +18,23 @@ import org.jfree.util.Rotation
 import net.liying.sourceCounter.plugin.views.base.BaseSourceCountResultChart
 import net.liying.sourceCounter.plugin.FileCountResult
 
-class SourceCountResultChart(parent: Composite, style: Int): BaseSourceCountResultChart(parent, style) {
+class SourceCountResultChart(parent: Composite, style: Int) : BaseSourceCountResultChart(parent, style) {
 	private var resultList = mutableListOf<FileCountResult>()
-
-	private val treeItemMap = mutableMapOf<IContainer, TreeItem>()
-
-	private val imageProject = ResourceManager.getPluginImageDescriptor(
-			"SourceCounter", "images/icons/project.gif").createImage()
-
-	private val imageFolder = ResourceManager.getPluginImageDescriptor(
-			"SourceCounter", "images/icons/folder.gif").createImage()
 
 	// =========================================================================
 
 	fun showResult(resultList: List<FileCountResult>) {
 		this.resultList = resultList.toMutableList()
 
-		this.resultList.sortBy {
-			result -> result.file.fullPath.toString()
-		}
-
-		this.displayResultTree()
-	}
-
-	// =========================================================================
-
-	private fun displayResultTree() {
-		this.treeItemMap.clear()
-
 		this.clearChart()
 
-		this.tree.removeAll()
-
-		this.resultList.forEach {
-			result -> this.createTreeItem(result.file.getParent())
-		}
-	}
-
-	private fun createTreeItem(container: IContainer): TreeItem {
-		var treeItem = this.treeItemMap.get(container)
-		if (treeItem != null) {
-			return treeItem
-		}
-
-		val parent = container.parent
-		treeItem =
-			if (parent != null && !(parent is IWorkspaceRoot)) {
-				val parentItem = this.createTreeItem(parent)
-				TreeItem(parentItem, SWT.NONE)
-			} else {
-				TreeItem(this.tree, SWT.NONE)
-			}
-
-		treeItem.data = container
-
-		treeItem.setText(container.name)
-
-		when (container) {
-			is IProject -> treeItem.setImage(0, this.imageProject)
-			is IFolder -> treeItem.setImage(0, this.imageFolder)
-		}
-
-		this.treeItemMap.put(container, treeItem)
-
-		return treeItem
+		this.resultTree.showResult(resultList)
 	}
 
 	override fun showChart() {
 		this.clearChart()
 
-		val treeItem = this.tree.selection.getOrNull(0)
+		val treeItem = this.resultTree.tree.selection.getOrNull(0)
 
 		if (treeItem == null) {
 			return
@@ -102,6 +46,7 @@ class SourceCountResultChart(parent: Composite, style: Int): BaseSourceCountResu
 	private fun clearChart() {
 		this.removeAllWidgets(this.chartDisplayComposite)
 	}
+
 	private fun removeAllWidgets(parentComposite: Composite) {
 		parentComposite.children.forEach {
 			control -> control.dispose()
@@ -117,8 +62,7 @@ class SourceCountResultChart(parent: Composite, style: Int): BaseSourceCountResu
 			title = "Count by Path"
 			categoryName = "Path"
 			dataSet = this.countByPath(treeItem)
-		}
-		else {
+		} else {
 			title = "Count by Type"
 			categoryName = "Type"
 			dataSet = this.countByType(treeItem)
@@ -126,8 +70,7 @@ class SourceCountResultChart(parent: Composite, style: Int): BaseSourceCountResu
 
 		var chart = if (this.radioBtnPieChart.selection) {
 						this.createPieChart(title, dataSet)
-					}
-					else {
+					} else {
 						this.createBarChart(title, categoryName, dataSet)
 					}
 		this.displayChartWidget(chart)

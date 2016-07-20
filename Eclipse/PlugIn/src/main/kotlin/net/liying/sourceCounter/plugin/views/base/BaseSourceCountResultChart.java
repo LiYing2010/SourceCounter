@@ -12,10 +12,11 @@ import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.widgets.Tree;
+
+import net.liying.sourceCounter.plugin.views.SourceCountResultTree;
 
 public class BaseSourceCountResultChart extends Composite {
-	protected Tree tree;
+	protected SourceCountResultTree resultTree;
 	protected Composite chartDisplayComposite;
 	protected Button radioBtnBarChart;
 	protected Button radioBtnCountByType;
@@ -36,19 +37,19 @@ public class BaseSourceCountResultChart extends Composite {
 		super(parent, style);
 		setLayout(new FormLayout());
 
-		tree = new Tree(this, SWT.BORDER);
-		tree.addSelectionListener(new SelectionAdapter() {
+		resultTree = new SourceCountResultTree(this, SWT.NONE);
+		resultTree.getTree().addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				BaseSourceCountResultChart.this.showChart();
 			}
 		});
-		FormData fd_tree = new FormData();
-		fd_tree.bottom = new FormAttachment(100, -4);
-		fd_tree.right = new FormAttachment(0, 180);
-		fd_tree.top = new FormAttachment(0, 4);
-		fd_tree.left = new FormAttachment(0, 4);
-		tree.setLayoutData(fd_tree);
+		FormData fd_resultTree = new FormData();
+		fd_resultTree.bottom = new FormAttachment(100, -4);
+		fd_resultTree.right = new FormAttachment(0, 180);
+		fd_resultTree.top = new FormAttachment(0, 4);
+		fd_resultTree.left = new FormAttachment(0, 4);
+		resultTree.setLayoutData(fd_resultTree);
 
 		Composite composite1 = new Composite(this, SWT.NONE);
 		composite1.setLayout(new FormLayout());
@@ -56,7 +57,7 @@ public class BaseSourceCountResultChart extends Composite {
 		fd_composite1.right = new FormAttachment(100, -4);
 		fd_composite1.bottom = new FormAttachment(100, -4);
 		fd_composite1.top = new FormAttachment(0, 4);
-		fd_composite1.left = new FormAttachment(tree, 8);
+		fd_composite1.left = new FormAttachment(resultTree, 8);
 		composite1.setLayoutData(fd_composite1);
 
 		Composite optionsComposite = new Composite(composite1, SWT.NONE);
