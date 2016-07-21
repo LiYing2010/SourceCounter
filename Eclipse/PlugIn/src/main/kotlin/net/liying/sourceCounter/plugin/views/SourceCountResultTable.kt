@@ -34,16 +34,29 @@ class SourceCountResultTable(parent: Composite, style: Int): BaseSourceCountResu
 	// =========================================================================
 
 	fun showResult(resultList: List<FileCountResult>) {
-		this.resultList = resultList.toMutableList()
+		this.resultTree.showResult(resultList)
+
+		this.table.sortColumn = this.resPathColumn
+		this.table.sortDirection = SWT.UP
+
+		this.clearTable()
+	}
+
+	override fun showTable() {
+		this.clearTable()
+
+		val treeItem = this.resultTree.tree.selection.getOrNull(0)
+		if (treeItem == null) {
+			return
+		}
 
 		this.total = CountResult(null, "")
+
+		this.resultList = this.resultTree.getAllDescendantResultList(treeItem).toMutableList()
 		this.resultList.forEach {
 			result ->
 				total += result.countResult
 		}
-
-		this.table.sortColumn = this.resPathColumn
-		this.table.sortDirection = SWT.UP
 
 		this.sortResultList()
 		this.displayResult(true)
@@ -105,11 +118,16 @@ class SourceCountResultTable(parent: Composite, style: Int): BaseSourceCountResu
 		if (this.table.sortDirection == SWT.UP)
 			this.resultList.sortBy(selector)
 		else
-			this.resultList.sortByDescending (selector)
+			this.resultList.sortByDescending(selector)
 	}
 
 	private fun getLineIntForSort(type: String?, lineInt: Int): Int {
 		return if (type == SourceCounter.Type_Unknown) -1 else lineInt
+	}
+
+	private fun clearTable() {
+		this.resultList.clear()
+		this.table.removeAll()
 	}
 
 	private fun displayResult(createFlag: Boolean) {
@@ -250,8 +268,7 @@ class SourceCountResultTable(parent: Composite, style: Int): BaseSourceCountResu
 		val confirmResult = MessageDialog.openConfirm(this.parent?.shell,
 				"Confirm", "Clear the count result?")
 		if (confirmResult) {
-			this.resultList.clear()
-			this.table.removeAll()
+			this.clearTable()
 		}
 	}
 }

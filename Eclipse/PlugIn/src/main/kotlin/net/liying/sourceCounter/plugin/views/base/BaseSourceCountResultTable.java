@@ -9,6 +9,8 @@ import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
@@ -19,7 +21,10 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.wb.swt.ResourceManager;
 
+import net.liying.sourceCounter.plugin.views.component.SourceCountResultTree;
+
 public class BaseSourceCountResultTable extends Composite {
+	protected SourceCountResultTree resultTree;
 	private TableViewer tableViewer;
 	protected Table table;
 	protected TableColumn nameColumn;
@@ -42,6 +47,10 @@ public class BaseSourceCountResultTable extends Composite {
 
 	protected void initUI() {
 		// do nothing here, implemented in sub-class
+	}
+
+	protected void showTable() {
+		// TODO Auto-generated method stub
 	}
 
 	protected void runOpenAction() {
@@ -70,21 +79,35 @@ public class BaseSourceCountResultTable extends Composite {
 		super(parent, SWT.NONE);
 		setLayout(new FormLayout());
 
+		resultTree = new SourceCountResultTree(this, SWT.NONE);
+		resultTree.getTree().addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				BaseSourceCountResultTable.this.showTable();
+			}
+		});
+		FormData fd_resultTree = new FormData();
+		fd_resultTree.top = new FormAttachment(0, 4);
+		fd_resultTree.bottom = new FormAttachment(100, -4);
+		fd_resultTree.right = new FormAttachment(0, 180);
+		fd_resultTree.left = new FormAttachment(0, 4);
+		resultTree.setLayoutData(fd_resultTree);
+
 		toolBar = new ToolBar(this, SWT.FLAT | SWT.WRAP | SWT.RIGHT);
 		FormData fd_toolBar = new FormData();
 		fd_toolBar.bottom = new FormAttachment(0, 22);
 		fd_toolBar.right = new FormAttachment(100);
 		fd_toolBar.top = new FormAttachment(0);
-		fd_toolBar.left = new FormAttachment(0);
+		fd_toolBar.left = new FormAttachment(resultTree, 8);
 		toolBar.setLayoutData(fd_toolBar);
 
 		tableViewer = new TableViewer(this, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI);
 		table = tableViewer.getTable();
 		FormData fd_table = new FormData();
 		fd_table.top = new FormAttachment(toolBar, 4);
-		fd_table.bottom = new FormAttachment(100);
-		fd_table.right = new FormAttachment(100);
-		fd_table.left = new FormAttachment(0);
+		fd_table.bottom = new FormAttachment(100, -4);
+		fd_table.right = new FormAttachment(100, -4);
+		fd_table.left = new FormAttachment(resultTree, 8);
 		table.setLayoutData(fd_table);
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
