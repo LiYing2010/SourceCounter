@@ -19,13 +19,7 @@ import net.liying.sourceCounter.plugin.views.base.BaseSourceCountResultChart
 import net.liying.sourceCounter.plugin.FileCountResult
 
 class SourceCountResultChart(parent: Composite, style: Int) : BaseSourceCountResultChart(parent, style) {
-	private var resultList = mutableListOf<FileCountResult>()
-
-	// =========================================================================
-
-	fun showResult(resultList: List<FileCountResult>) {
-		this.resultList = resultList.toMutableList()
-
+	public fun showResult(resultList: List<FileCountResult>) {
 		this.clearChart()
 
 		this.resultTree.showResult(resultList)
@@ -83,17 +77,19 @@ class SourceCountResultChart(parent: Composite, style: Int) : BaseSourceCountRes
 
 		treeItem.items.forEach {
 			childItem ->
-				val childResource = childItem.data as IContainer
-				val descendantResultList = this.allDescendantResultList(childResource)
+				val childResource = this.resultTree.getResource(childItem)
+
+				val descendantResultList = this.resultTree.getAllDescendantResultList(childItem)
 				val statementSum = this.statementSum(descendantResultList)
 
 				dataSet.put(childResource.name, statementSum)
 		}
 
-		val resource = treeItem.data as IContainer
-		val descendantResultList = this.directDescendantResultList(resource)
+		val descendantResultList = this.resultTree.getDirectDescendantResultList(treeItem)
 		if (descendantResultList.isNotEmpty()) {
+			val resource = this.resultTree.getResource(treeItem)
 			val statementSum = this.statementSum(descendantResultList)
+
 			dataSet.put("[${resource.name}]", statementSum)
 		}
 
@@ -101,8 +97,7 @@ class SourceCountResultChart(parent: Composite, style: Int) : BaseSourceCountRes
 	}
 
 	private fun countByType(treeItem: TreeItem): Map<String, Int> {
-		val resource = treeItem.data as IContainer
-		val descendantResultList = this.allDescendantResultList(resource)
+		val descendantResultList = this.resultTree.getAllDescendantResultList(treeItem)
 
 		val keySelector = {
 			result: FileCountResult -> result.countResult.type
@@ -125,24 +120,6 @@ class SourceCountResultChart(parent: Composite, style: Int) : BaseSourceCountRes
 
 		return dataSet
 	}
-
-
-	private fun isAncestor(descendant: IResource, ancestor: IContainer): Boolean
-		= when (descendant.parent) {
-				null -> false
-				ancestor -> true
-				else -> this.isAncestor(descendant.parent, ancestor)
-			}
-
-	private fun allDescendantResultList(ancestor: IContainer): List<FileCountResult>
-		= this.resultList.filter {
-				result -> this.isAncestor(result.file, ancestor)
-			}
-
-	private fun directDescendantResultList(ancestor: IContainer): List<FileCountResult>
-		= this.resultList.filter {
-				result -> result.file.parent == ancestor
-			}
 
 	private fun statementSum(resultList: List<FileCountResult>): Int
 		= resultList.sumBy { result -> result.countResult.statement }

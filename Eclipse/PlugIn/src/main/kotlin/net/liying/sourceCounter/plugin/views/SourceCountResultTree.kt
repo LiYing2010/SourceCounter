@@ -22,7 +22,9 @@ class SourceCountResultTree(parent: Composite, style: Int): BaseSourceCountResul
 	private val imageFolder = ResourceManager.getPluginImageDescriptor(
 			"SourceCounter", "images/icons/folder.gif").createImage()
 
-	fun showResult(resultList: List<FileCountResult>) {
+	// =========================================================================
+
+	public fun showResult(resultList: List<FileCountResult>) {
 		this.resultList = resultList.toMutableList()
 
 		this.resultList.sortBy {
@@ -31,6 +33,26 @@ class SourceCountResultTree(parent: Composite, style: Int): BaseSourceCountResul
 
 		this.displayResultTree()
 	}
+
+	public fun getResource(treeItem: TreeItem): IResource
+		= treeItem.data as IResource
+
+	public fun getAllDescendantResultList(treeItem: TreeItem): List<FileCountResult>
+		= this.resultList.filter {
+				result -> this.isAncestor(result.file, (treeItem.data as IContainer))
+			}
+
+	public fun getDirectDescendantResultList(treeItem: TreeItem): List<FileCountResult>
+		= this.resultList.filter {
+				result -> result.file.parent == (treeItem.data as IContainer)
+			}
+
+	private fun isAncestor(descendant: IResource, ancestor: IContainer): Boolean
+		= when (descendant.parent) {
+				null -> false
+				ancestor -> true
+				else -> this.isAncestor(descendant.parent, ancestor)
+			}
 
 	// =========================================================================
 
@@ -72,5 +94,4 @@ class SourceCountResultTree(parent: Composite, style: Int): BaseSourceCountResul
 
 		return treeItem
 	}
-
 }
