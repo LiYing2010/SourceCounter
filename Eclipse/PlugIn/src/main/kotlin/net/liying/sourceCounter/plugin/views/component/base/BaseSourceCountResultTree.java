@@ -1,4 +1,4 @@
-package net.liying.sourceCounter.plugin.views.component;
+package net.liying.sourceCounter.plugin.views.component.base;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;

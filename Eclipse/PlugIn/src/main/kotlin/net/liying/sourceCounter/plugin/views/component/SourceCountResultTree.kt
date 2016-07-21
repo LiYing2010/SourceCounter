@@ -9,7 +9,7 @@ import org.eclipse.wb.swt.ResourceManager
 
 import net.liying.sourceCounter.plugin.FileCountResult
 
-import net.liying.sourceCounter.plugin.views.component.BaseSourceCountResultTree
+import net.liying.sourceCounter.plugin.views.component.base.BaseSourceCountResultTree
 
 class SourceCountResultTree(parent: Composite, style: Int): BaseSourceCountResultTree(parent, style) {
 	private var resultList = mutableListOf<FileCountResult>()
