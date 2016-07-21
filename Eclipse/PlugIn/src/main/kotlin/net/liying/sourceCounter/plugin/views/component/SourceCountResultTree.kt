@@ -1,4 +1,4 @@
-package net.liying.sourceCounter.plugin.views
+package net.liying.sourceCounter.plugin.views.component
 
 import org.eclipse.swt.*
 import org.eclipse.swt.widgets.*

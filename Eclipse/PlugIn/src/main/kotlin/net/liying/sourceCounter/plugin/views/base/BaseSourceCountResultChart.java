@@ -13,7 +13,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 
-import net.liying.sourceCounter.plugin.views.SourceCountResultTree;
+import net.liying.sourceCounter.plugin.views.component.SourceCountResultTree;
 
 public class BaseSourceCountResultChart extends Composite {
 	protected SourceCountResultTree resultTree;
