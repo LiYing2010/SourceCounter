@@ -19,14 +19,7 @@ class CountResult(val file: File?, val type: String?) {
 	var empty: Int = 0;
 
 	operator fun plus(b: CountResult): CountResult {
-		val resultType = when (this.type) {
-			null,
-			b.type
-				-> b.type
-			else
-				-> ""
-		}
-		val result = CountResult(null, resultType)
+		val result = CountResult(null, null)
 
 		result.total = this.total + b.total
 		result.statement = this.statement + b.statement

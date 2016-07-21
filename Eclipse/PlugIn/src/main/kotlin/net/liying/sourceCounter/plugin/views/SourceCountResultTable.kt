@@ -55,7 +55,7 @@ class SourceCountResultTable(parent: Composite, style: Int): BaseSourceCountResu
 		this.resultList = this.resultTree.getAllDescendantResultList(treeItem).toMutableList()
 		this.resultList.forEach {
 			result ->
-				total += result.countResult
+				this.total += result.countResult
 		}
 
 		this.sortResultList()
@@ -137,6 +137,9 @@ class SourceCountResultTable(parent: Composite, style: Int): BaseSourceCountResu
 			this.table.clearAll()
 
 		// =====================================================================
+		val extensionSet = mutableSetOf<String?>()
+		val typeSet = mutableSetOf<String?>()
+
 		// show rows for all the count results
 		this.resultList.forEachIndexed {
 			idx, result ->
@@ -150,6 +153,10 @@ class SourceCountResultTable(parent: Composite, style: Int): BaseSourceCountResu
 
 				item.data = result
 
+				val extension = file.fullPath.fileExtension;
+				extensionSet.add(extension?.toLowerCase())
+				typeSet.add(countResult.type)
+
 				var textArray = arrayOf(
 						// Name
 						file.name,
@@ -158,7 +165,7 @@ class SourceCountResultTable(parent: Composite, style: Int): BaseSourceCountResu
 						// File Path
 						countResult.file?.absolutePath,
 						// Extension
-						file.fullPath.fileExtension,
+						extension,
 						// Type
 						countResult.type)
 				if (countResult.type != SourceCounter.Type_Unknown) {
@@ -191,14 +198,14 @@ class SourceCountResultTable(parent: Composite, style: Int): BaseSourceCountResu
 		item.setText(arrayOf(
 				// Name
 				"Total",
-				// Resource Path
-				"",
-				// File Path
-				"",
-				// Extension
-				"",
-				// Type
-				total.type,
+				// Resource Count
+				this.resultList.size.toString(),
+				// File Count
+				this.resultList.size.toString(),
+				// Extension Count
+				extensionSet.size.toString(),
+				// Type Count
+				typeSet.size.toString(),
 				// Statement
 				total.statement.toString(),
 				// Document
