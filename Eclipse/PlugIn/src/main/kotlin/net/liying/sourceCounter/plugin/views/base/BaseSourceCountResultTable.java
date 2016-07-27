@@ -50,7 +50,7 @@ public class BaseSourceCountResultTable extends Composite {
 	}
 
 	protected void showTable() {
-		// TODO Auto-generated method stub
+		// do nothing here, implemented in sub-class
 	}
 
 	protected void runOpenAction() {
