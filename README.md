@@ -4,7 +4,7 @@ It can tell you that how many lines of statement/document/comment/empty in your 
 
 Current version
 ===========
-v1.5.0 released at 2016/06/03
+v1.6.0 released at 2016/07/21
 
 
 Install
