@@ -2,7 +2,7 @@
 <feature
       id="net.liying.SourceCounter"
       label="Source Counter"
-      version="1.6.0.qualifier"
+      version="1.7.0.qualifier"
       provider-name="Li Ying">
 
    <description url="https://github.com/LiYing2010/SourceCounter">
