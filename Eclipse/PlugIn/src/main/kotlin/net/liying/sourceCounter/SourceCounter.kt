@@ -8,6 +8,8 @@ import net.liying.sourceCounter.parser.*
 import org.antlr.v4.runtime.*
 
 class CountResult(val file: File?, val type: String?) {
+	var fileSize: Long = if (this.file != null) file.length() else 0
+
 	var total: Int = 0
 
 	var statement: Int = 0
@@ -21,6 +23,7 @@ class CountResult(val file: File?, val type: String?) {
 	operator fun plus(b: CountResult): CountResult {
 		val result = CountResult(null, null)
 
+		result.fileSize = this.fileSize + b.fileSize
 		result.total = this.total + b.total
 		result.statement = this.statement + b.statement
 		result.document = this.document + b.document
@@ -33,6 +36,7 @@ class CountResult(val file: File?, val type: String?) {
 	fun print() {
 		println("""File: ${this.file?.absolutePath}
 				|Type: ${this.type}
+				|FileSize: ${this.fileSize}
 				|Total: ${this.total}
 				|Statement: ${this.statement}
 				|Document: ${this.document}

@@ -37,6 +37,7 @@ public class BaseSourceCountResultTable extends Composite {
 	protected TableColumn filePathColumn;
 	protected TableColumn extensionColumn;
 	protected TableColumn typeColumn;
+	protected TableColumn fileSizeColumn;
 	protected TableColumn statementColumn;
 	protected TableColumn documentColumn;
 	protected TableColumn commentColumn;
@@ -166,31 +167,37 @@ public class BaseSourceCountResultTable extends Composite {
 		typeColumn.setText("Type");
 
 		TableViewerColumn tableViewerColumn_6 = new TableViewerColumn(tableViewer, SWT.NONE);
-		statementColumn = tableViewerColumn_6.getColumn();
+		fileSizeColumn = tableViewerColumn_6.getColumn();
+		fileSizeColumn.setAlignment(SWT.RIGHT);
+		fileSizeColumn.setWidth(100);
+		fileSizeColumn.setText("File Size");
+
+		TableViewerColumn tableViewerColumn_7 = new TableViewerColumn(tableViewer, SWT.NONE);
+		statementColumn = tableViewerColumn_7.getColumn();
 		statementColumn.setAlignment(SWT.RIGHT);
 		statementColumn.setWidth(100);
 		statementColumn.setText("Statement");
 
-		TableViewerColumn tableViewerColumn_7 = new TableViewerColumn(tableViewer, SWT.NONE);
-		documentColumn = tableViewerColumn_7.getColumn();
+		TableViewerColumn tableViewerColumn_8 = new TableViewerColumn(tableViewer, SWT.NONE);
+		documentColumn = tableViewerColumn_8.getColumn();
 		documentColumn.setAlignment(SWT.RIGHT);
 		documentColumn.setWidth(100);
 		documentColumn.setText("Document");
 
-		TableViewerColumn tableViewerColumn_8 = new TableViewerColumn(tableViewer, SWT.NONE);
-		commentColumn = tableViewerColumn_8.getColumn();
+		TableViewerColumn tableViewerColumn_9 = new TableViewerColumn(tableViewer, SWT.NONE);
+		commentColumn = tableViewerColumn_9.getColumn();
 		commentColumn.setAlignment(SWT.RIGHT);
 		commentColumn.setWidth(100);
 		commentColumn.setText("Comment");
 
-		TableViewerColumn tableViewerColumn_9 = new TableViewerColumn(tableViewer, SWT.NONE);
-		emptyColumn = tableViewerColumn_9.getColumn();
+		TableViewerColumn tableViewerColumn_10 = new TableViewerColumn(tableViewer, SWT.NONE);
+		emptyColumn = tableViewerColumn_10.getColumn();
 		emptyColumn.setAlignment(SWT.RIGHT);
 		emptyColumn.setWidth(100);
 		emptyColumn.setText("Empty");
 
-		TableViewerColumn tableViewerColumn_10 = new TableViewerColumn(tableViewer, SWT.NONE);
-		totalColumn = tableViewerColumn_10.getColumn();
+		TableViewerColumn tableViewerColumn_11 = new TableViewerColumn(tableViewer, SWT.NONE);
+		totalColumn = tableViewerColumn_11.getColumn();
 		totalColumn.setAlignment(SWT.RIGHT);
 		totalColumn.setWidth(100);
 		totalColumn.setText("Total");

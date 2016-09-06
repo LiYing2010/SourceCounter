@@ -12,7 +12,7 @@ import net.liying.sourceCounter.*
 import net.liying.sourceCounter.plugin.views.base.BaseSourceCountResultTable
 import net.liying.sourceCounter.plugin.FileCountResult
 
-class SourceCountResultTable(parent: Composite, style: Int): BaseSourceCountResultTable(parent, style) {
+class SourceCountResultTable(parent: Composite, style: Int) : BaseSourceCountResultTable(parent, style) {
 	private var resultList = mutableListOf<FileCountResult>()
 
 	private var total = CountResult(null, "")
@@ -24,10 +24,10 @@ class SourceCountResultTable(parent: Composite, style: Int): BaseSourceCountResu
 	override fun initUI() {
 		this.clipboard = Clipboard(this.display)
 
-		this.table.columns.forEach {
-			column -> column.addListener(SWT.Selection) {
-							event -> this.sortActionListener(event)
-						}
+		this.table.columns.forEach { column ->
+			column.addListener(SWT.Selection) { event ->
+				this.sortActionListener(event)
+			}
 		}
 	}
 
@@ -53,9 +53,8 @@ class SourceCountResultTable(parent: Composite, style: Int): BaseSourceCountResu
 		this.total = CountResult(null, "")
 
 		this.resultList = this.resultTree.getAllDescendantResultList(treeItem).toMutableList()
-		this.resultList.forEach {
-			result ->
-				this.total += result.countResult
+		this.resultList.forEach { result ->
+			this.total += result.countResult
 		}
 
 		this.sortResultList()
@@ -71,10 +70,11 @@ class SourceCountResultTable(parent: Composite, style: Int): BaseSourceCountResu
 		val clickedColumn = event.widget as TableColumn
 
 		if (this.table.sortColumn === clickedColumn) {
-			this.table.sortDirection = when (this.table.sortDirection) {
-											SWT.UP -> SWT.DOWN
-											else -> SWT.UP
-										}
+			this.table.sortDirection =
+					when (this.table.sortDirection) {
+						SWT.UP -> SWT.DOWN
+						else -> SWT.UP
+					}
 		} else {
 			this.table.sortColumn = clickedColumn
 			this.table.sortDirection = SWT.UP
@@ -90,29 +90,31 @@ class SourceCountResultTable(parent: Composite, style: Int): BaseSourceCountResu
 		val sortColumn = this.table.sortColumn
 
 		val selector = { result: FileCountResult ->
-				when (sortColumn) {
-					this.nameColumn -> result.file.name
+			when (sortColumn) {
+				this.nameColumn -> result.file.name
 
-					this.resPathColumn -> result.file.fullPath.toString()
+				this.resPathColumn -> result.file.fullPath.toString()
 
-					this.filePathColumn -> result.countResult.file?.absolutePath
+				this.filePathColumn -> result.countResult.file?.absolutePath
 
-					this.extensionColumn -> result.file.fullPath.fileExtension ?: ""
+				this.extensionColumn -> result.file.fullPath.fileExtension ?: ""
 
-					this.typeColumn -> result.countResult.type
+				this.typeColumn -> result.countResult.type
 
-					this.statementColumn -> this.getLineIntForSort(result.countResult.type, result.countResult.statement)
+				this.fileSizeColumn -> result.countResult.fileSize
 
-					this.documentColumn -> this.getLineIntForSort(result.countResult.type, result.countResult.document)
+				this.statementColumn -> this.getLineIntForSort(result.countResult.type, result.countResult.statement)
 
-					this.commentColumn -> this.getLineIntForSort(result.countResult.type, result.countResult.comment)
+				this.documentColumn -> this.getLineIntForSort(result.countResult.type, result.countResult.document)
 
-					this.emptyColumn -> this.getLineIntForSort(result.countResult.type, result.countResult.empty)
+				this.commentColumn -> this.getLineIntForSort(result.countResult.type, result.countResult.comment)
 
-					this.totalColumn -> this.getLineIntForSort(result.countResult.type, result.countResult.total)
+				this.emptyColumn -> this.getLineIntForSort(result.countResult.type, result.countResult.empty)
 
-					else -> null
-				} as Comparable<Any>
+				this.totalColumn -> this.getLineIntForSort(result.countResult.type, result.countResult.total)
+
+				else -> null
+			} as Comparable<Any>
 		}
 
 		if (this.table.sortDirection == SWT.UP)
@@ -141,57 +143,62 @@ class SourceCountResultTable(parent: Composite, style: Int): BaseSourceCountResu
 		val typeSet = mutableSetOf<String?>()
 
 		// show rows for all the count results
-		this.resultList.forEachIndexed {
-			idx, result ->
-				val file = result.file
-				val countResult = result.countResult
+		this.resultList.forEachIndexed { idx, result ->
+			val file = result.file
+			val countResult = result.countResult
 
-				val item = if (createFlag)
-							TableItem(this.table, SWT.NONE)
-						else
-							this.table.getItem(idx)
+			val item = if (createFlag)
+				TableItem(this.table, SWT.NONE)
+			else
+				this.table.getItem(idx)
 
-				item.data = result
+			item.data = result
 
-				val extension = file.fullPath.fileExtension
-				extensionSet.add(extension?.toLowerCase())
-				typeSet.add(countResult.type)
+			val extension = file.fullPath.fileExtension
+			extensionSet.add(extension?.toLowerCase())
+			typeSet.add(countResult.type)
 
-				var textArray = arrayOf(
-						// Name
-						file.name,
-						// Resource Path
-						file.fullPath.toString(),
-						// File Path
-						countResult.file?.absolutePath,
-						// Extension
-						extension,
-						// Type
-						countResult.type)
-				if (countResult.type != SourceCounter.Type_Unknown) {
-					textArray += arrayOf(
-						// Statement
-						countResult.statement.toString(),
-						// Document
-						countResult.document.toString(),
-						// Comment
-						countResult.comment.toString(),
-						// Empty
-						countResult.empty.toString(),
-						// Total
-						countResult.total.toString()
-					)
-				}
+			var textArray = arrayOf(
+					// Name
+					file.name,
+					// Resource Path
+					file.fullPath.toString(),
+					// File Path
+					countResult.file?.absolutePath,
+					// Extension
+					extension,
+					// Type
+					countResult.type,
+					// File Size
+					countResult.fileSize.toString()
+			)
+			textArray +=
+					if (countResult.type != SourceCounter.Type_Unknown) {
+						arrayOf(
+								// Statement
+								countResult.statement.toString(),
+								// Document
+								countResult.document.toString(),
+								// Comment
+								countResult.comment.toString(),
+								// Empty
+								countResult.empty.toString(),
+								// Total
+								countResult.total.toString()
+						)
+					} else {
+						Array(5, { idx -> "---" })
+					}
 
-				item.setText(textArray)
+			item.setText(textArray)
 		}
 
 		// =====================================================================
 		// show row for the summation
 		val item = if (createFlag)
-					TableItem(this.table, SWT.NONE)
-				else
-					this.table.getItem(this.resultList.size)
+			TableItem(this.table, SWT.NONE)
+		else
+			this.table.getItem(this.resultList.size)
 
 		item.data = null
 
@@ -206,6 +213,8 @@ class SourceCountResultTable(parent: Composite, style: Int): BaseSourceCountResu
 				extensionSet.size.toString(),
 				// Type Count
 				typeSet.size.toString(),
+				// File Size
+				total.fileSize.toString(),
 				// Statement
 				total.statement.toString(),
 				// Document
@@ -216,7 +225,7 @@ class SourceCountResultTable(parent: Composite, style: Int): BaseSourceCountResu
 				total.empty.toString(),
 				// Total
 				total.total.toString()
-			))
+		))
 	}
 
 	// =========================================================================
@@ -226,11 +235,10 @@ class SourceCountResultTable(parent: Composite, style: Int): BaseSourceCountResu
 	 */
 	override fun runOpenAction() {
 		val window = PlatformUI.getWorkbench().activeWorkbenchWindow
-		this.table.selection.forEach {
-			tableItem ->
-				val result = tableItem.data as FileCountResult?
-				if (result != null)
-					IDE.openEditor(window.activePage, result.file, true)
+		this.table.selection.forEach { tableItem ->
+			val result = tableItem.data as FileCountResult?
+			if (result != null)
+				IDE.openEditor(window.activePage, result.file, true)
 		}
 	}
 
@@ -249,19 +257,18 @@ class SourceCountResultTable(parent: Composite, style: Int): BaseSourceCountResu
 
 		var content = StringBuilder()
 
-		val columnArray = Array(columnCount) {
-			idx -> this.table.columns[idx].text
+		val columnArray = Array(columnCount) { idx ->
+			this.table.columns[idx].text
 		}
 		columnArray.joinTo(content, "\t")
 		content.append("\n")
 
-		this.table.selection.forEach {
-			tableItem ->
-				val textArray = Array(columnCount) {
-					idx -> tableItem.getText(idx)
-				}
-				textArray.joinTo(content, "\t")
-				content.append("\n")
+		this.table.selection.forEach { tableItem ->
+			val textArray = Array(columnCount) { idx ->
+				tableItem.getText(idx)
+			}
+			textArray.joinTo(content, "\t")
+			content.append("\n")
 		}
 
 		val transfer = TextTransfer.getInstance()
