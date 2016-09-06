@@ -153,7 +153,7 @@ class SourceCountResultTable(parent: Composite, style: Int): BaseSourceCountResu
 
 				item.data = result
 
-				val extension = file.fullPath.fileExtension;
+				val extension = file.fullPath.fileExtension
 				extensionSet.add(extension?.toLowerCase())
 				typeSet.add(countResult.type)
 
@@ -230,7 +230,7 @@ class SourceCountResultTable(parent: Composite, style: Int): BaseSourceCountResu
 			tableItem ->
 				val result = tableItem.data as FileCountResult?
 				if (result != null)
-					IDE.openEditor(window.activePage, result.file, true);
+					IDE.openEditor(window.activePage, result.file, true)
 		}
 	}
 

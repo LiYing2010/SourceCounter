@@ -127,7 +127,7 @@ class SourceCountResultChart(parent: Composite, style: Int) : BaseSourceCountRes
 	// =========================================================================
 
 	private fun createPieChart(title: String, dataSet: Map<String, Int>): JFreeChart {
-		val pieDataSet = DefaultPieDataset();
+		val pieDataSet = DefaultPieDataset()
 
 		dataSet.forEach {
 			entry -> pieDataSet.setValue(entry.key, entry.value)
@@ -145,7 +145,7 @@ class SourceCountResultChart(parent: Composite, style: Int) : BaseSourceCountRes
 
 	private fun createBarChart(title: String, categoryName: String,
 			dataSet: Map<String, Int>): JFreeChart {
-		val categoryDataset = DefaultCategoryDataset();
+		val categoryDataset = DefaultCategoryDataset()
 
 		dataSet.forEach {
 			entry -> categoryDataset.addValue(entry.value, entry.key, "Statement")
@@ -159,8 +159,8 @@ class SourceCountResultChart(parent: Composite, style: Int) : BaseSourceCountRes
 
 	private fun displayChartWidget(chart: JFreeChart) {
 		val chartComposite = ChartComposite(this.chartDisplayComposite, SWT.NONE, chart, true)
-		val gridData = GridData(SWT.FILL, SWT.FILL, true, true);
-		chartComposite.setLayoutData(gridData);
+		val gridData = GridData(SWT.FILL, SWT.FILL, true, true)
+		chartComposite.setLayoutData(gridData)
 
 		this.chartDisplayComposite.layout(true)
 	}

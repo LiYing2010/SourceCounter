@@ -8,15 +8,15 @@ import net.liying.sourceCounter.parser.*
 import org.antlr.v4.runtime.*
 
 class CountResult(val file: File?, val type: String?) {
-	var total: Int = 0;
+	var total: Int = 0
 
-	var statement: Int = 0;
+	var statement: Int = 0
 
-	var document: Int = 0;
+	var document: Int = 0
 
-	var comment: Int = 0;
+	var comment: Int = 0
 
-	var empty: Int = 0;
+	var empty: Int = 0
 
 	operator fun plus(b: CountResult): CountResult {
 		val result = CountResult(null, null)
@@ -75,31 +75,19 @@ class SourceCounter(val file: File, val type: String, val lexer: BaseLexer?) {
 			var lineRange = token.line.rangeTo(endLine)
 
 			when (token.type) {
-				in statementTokens
-					-> statementLines.addAll(lineRange)
-
-				in documentTokens
-					-> documentLines.addAll(lineRange)
-
-				in commentTokens
-					-> commentLines.addAll(lineRange)
+				in statementTokens -> statementLines.addAll(lineRange)
+				in documentTokens -> documentLines.addAll(lineRange)
+				in commentTokens -> commentLines.addAll(lineRange)
 			}
 		}
 
 		this.countResult.total = maxLine
 		for (line in 1..maxLine) {
 			when (line) {
-				in statementLines
-					-> this.countResult.statement++
-
-				in documentLines
-					-> this.countResult.document++
-
-				in commentLines
-					-> this.countResult.comment++
-
-				else
-					-> this.countResult.empty++
+				in statementLines -> this.countResult.statement++
+				in documentLines -> this.countResult.document++
+				in commentLines -> this.countResult.comment++
+				else -> this.countResult.empty++
 			}
 		}
 	}
@@ -111,18 +99,16 @@ fun buildSourceCounter(file: File, encoding: String = "UTF-8"): SourceCounter {
 	val fileName = normalizedFile.name
 	val extension = normalizedFile.extension
 
-	fileTypeInfoList.forEach {
-		fileTypeInfo ->
-			val mapping = fileTypeInfo.mappingList.find { it.match(fileName, extension) }
-			if (mapping != null) {
-				val reader = InputStreamReader(FileInputStream(normalizedFile), encoding)
-				val input = ANTLRInputStream(reader)
-				val lexer = fileTypeInfo.lexerCreateFunc(input)
+	fileTypeInfoList.forEach { fileTypeInfo ->
+		val mapping = fileTypeInfo.mappingList.find { it.match(fileName, extension) }
+		if (mapping != null) {
+			val reader = InputStreamReader(FileInputStream(normalizedFile), encoding)
+			val input = ANTLRInputStream(reader)
+			val lexer = fileTypeInfo.lexerCreateFunc(input)
 
-				return SourceCounter(normalizedFile, mapping.typeName, lexer)
-			}
+			return SourceCounter(normalizedFile, mapping.typeName, lexer)
+		}
 	}
 
 	return SourceCounter(normalizedFile, SourceCounter.Type_Unknown, null)
 }
-

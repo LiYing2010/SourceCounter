@@ -35,7 +35,7 @@ class SourceCounterRunner(val selection: IStructuredSelection) {
 			item -> this.getWorkCount(item)
 		}
 
-		val subMonitor = SubMonitor.convert(monitor, workCount);
+		val subMonitor = SubMonitor.convert(monitor, workCount)
 
 		this.selection.toList().forEach {
 			item -> if (item is IResource) {

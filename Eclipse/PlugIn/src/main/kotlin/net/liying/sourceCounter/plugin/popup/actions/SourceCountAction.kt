@@ -43,7 +43,7 @@ class SourceCountAction: IObjectActionDelegate {
 						this@SourceCountAction.site as IWorkbenchPartSite,
 						monitor)
 
-				return Status.OK_STATUS;
+				return Status.OK_STATUS
 			}
 		}
 
