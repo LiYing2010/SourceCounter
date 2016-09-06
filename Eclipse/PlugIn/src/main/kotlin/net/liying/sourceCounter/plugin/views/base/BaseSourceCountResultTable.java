@@ -7,6 +7,7 @@ import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -24,8 +25,12 @@ import org.eclipse.wb.swt.ResourceManager;
 import net.liying.sourceCounter.plugin.views.component.SourceCountResultTree;
 
 public class BaseSourceCountResultTable extends Composite {
+	private SashForm sashForm;
+	private Composite composite;
+
 	protected SourceCountResultTree resultTree;
 	private TableViewer tableViewer;
+
 	protected Table table;
 	protected TableColumn nameColumn;
 	protected TableColumn resPathColumn;
@@ -79,7 +84,15 @@ public class BaseSourceCountResultTable extends Composite {
 		super(parent, SWT.NONE);
 		setLayout(new FormLayout());
 
-		resultTree = new SourceCountResultTree(this, SWT.NONE);
+		sashForm = new SashForm(this, SWT.NONE);
+		FormData fd_sashForm = new FormData();
+		fd_sashForm.top = new FormAttachment(0);
+		fd_sashForm.bottom = new FormAttachment(100);
+		fd_sashForm.right = new FormAttachment(100);
+		fd_sashForm.left = new FormAttachment(0);
+		sashForm.setLayoutData(fd_sashForm);
+
+		resultTree = new SourceCountResultTree(sashForm, SWT.NONE);
 		resultTree.getTree().addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -93,21 +106,27 @@ public class BaseSourceCountResultTable extends Composite {
 		fd_resultTree.left = new FormAttachment(0, 4);
 		resultTree.setLayoutData(fd_resultTree);
 
-		toolBar = new ToolBar(this, SWT.FLAT | SWT.WRAP | SWT.RIGHT);
+		composite = new Composite(sashForm, SWT.BORDER);
+		FormLayout fl_composite = new FormLayout();
+		fl_composite.marginWidth = 2;
+		fl_composite.marginHeight = 2;
+		composite.setLayout(fl_composite);
+
+		toolBar = new ToolBar(composite, SWT.FLAT | SWT.WRAP | SWT.RIGHT);
 		FormData fd_toolBar = new FormData();
 		fd_toolBar.bottom = new FormAttachment(0, 22);
 		fd_toolBar.right = new FormAttachment(100);
 		fd_toolBar.top = new FormAttachment(0);
-		fd_toolBar.left = new FormAttachment(resultTree, 8);
+		fd_toolBar.left = new FormAttachment(0);
 		toolBar.setLayoutData(fd_toolBar);
 
-		tableViewer = new TableViewer(this, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI);
+		tableViewer = new TableViewer(composite, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI);
 		table = tableViewer.getTable();
 		FormData fd_table = new FormData();
-		fd_table.top = new FormAttachment(toolBar, 4);
-		fd_table.bottom = new FormAttachment(100, -4);
-		fd_table.right = new FormAttachment(100, -4);
-		fd_table.left = new FormAttachment(resultTree, 8);
+		fd_table.bottom = new FormAttachment(100);
+		fd_table.right = new FormAttachment(100);
+		fd_table.top = new FormAttachment(0, 24);
+		fd_table.left = new FormAttachment(0);
 		table.setLayoutData(fd_table);
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
@@ -175,6 +194,8 @@ public class BaseSourceCountResultTable extends Composite {
 		totalColumn.setAlignment(SWT.RIGHT);
 		totalColumn.setWidth(100);
 		totalColumn.setText("Total");
+
+		sashForm.setWeights(new int[] { 10, 30 });
 
 		this.createActions();
 		this.initToolBar();

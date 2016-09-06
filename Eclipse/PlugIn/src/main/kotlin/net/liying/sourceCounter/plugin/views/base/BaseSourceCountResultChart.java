@@ -1,6 +1,7 @@
 package net.liying.sourceCounter.plugin.views.base;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
@@ -22,6 +23,7 @@ public class BaseSourceCountResultChart extends Composite {
 	protected Button radioBtnCountByType;
 	protected Button radioBtnCountByPath;
 	protected Button radioBtnPieChart;
+	private SashForm sashForm;
 
 	protected void showChart() {
 		// do nothing here, implemented in sub-class
@@ -37,28 +39,24 @@ public class BaseSourceCountResultChart extends Composite {
 		super(parent, style);
 		setLayout(new FormLayout());
 
-		resultTree = new SourceCountResultTree(this, SWT.NONE);
+		sashForm = new SashForm(this, SWT.NONE);
+		FormData fd_sashForm = new FormData();
+		fd_sashForm.top = new FormAttachment(0);
+		fd_sashForm.bottom = new FormAttachment(100);
+		fd_sashForm.right = new FormAttachment(100);
+		fd_sashForm.left = new FormAttachment(0);
+		sashForm.setLayoutData(fd_sashForm);
+
+		resultTree = new SourceCountResultTree(sashForm, SWT.NONE);
 		resultTree.getTree().addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				BaseSourceCountResultChart.this.showChart();
 			}
 		});
-		FormData fd_resultTree = new FormData();
-		fd_resultTree.bottom = new FormAttachment(100, -4);
-		fd_resultTree.right = new FormAttachment(0, 180);
-		fd_resultTree.top = new FormAttachment(0, 4);
-		fd_resultTree.left = new FormAttachment(0, 4);
-		resultTree.setLayoutData(fd_resultTree);
 
-		Composite composite1 = new Composite(this, SWT.NONE);
+		Composite composite1 = new Composite(sashForm, SWT.BORDER);
 		composite1.setLayout(new FormLayout());
-		FormData fd_composite1 = new FormData();
-		fd_composite1.right = new FormAttachment(100, -4);
-		fd_composite1.bottom = new FormAttachment(100, -4);
-		fd_composite1.top = new FormAttachment(0, 4);
-		fd_composite1.left = new FormAttachment(resultTree, 8);
-		composite1.setLayoutData(fd_composite1);
 
 		Composite optionsComposite = new Composite(composite1, SWT.NONE);
 		FormData fd_optionsComposite = new FormData();
@@ -123,6 +121,8 @@ public class BaseSourceCountResultChart extends Composite {
 		fd_chartDisplayComposite.left = new FormAttachment(0, 4);
 		chartDisplayComposite.setLayoutData(fd_chartDisplayComposite);
 		chartDisplayComposite.setLayout(new GridLayout(1, false));
+
+		sashForm.setWeights(new int[] { 10, 30 });
 	}
 
 	@Override
