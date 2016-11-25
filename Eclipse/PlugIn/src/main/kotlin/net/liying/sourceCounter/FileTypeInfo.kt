@@ -79,6 +79,9 @@ internal val fileTypeInfoList = listOf(
 				FileTypeInfo({input -> CSharpLexer(input)},
 					"C#", "cs"),
 
+				FileTypeInfo({input -> PythonLexer(input)},
+					"Python", "py"),
+
 				FileTypeInfo({input -> CSSLexer(input)},
 					"CSS", "css"),
 

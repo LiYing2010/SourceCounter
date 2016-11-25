@@ -1,0 +1,6 @@
+SingleLineComment=1
+SingleLineString_SingleQuotation=2
+SingleLineString_DoubleQuotation=3
+MultiLineString=4
+Statement=5
+Whitespace=6

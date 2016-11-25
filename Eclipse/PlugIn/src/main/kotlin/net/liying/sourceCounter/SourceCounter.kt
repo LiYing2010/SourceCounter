@@ -71,7 +71,12 @@ class SourceCounter(val file: File, val type: String, val lexer: BaseLexer?) {
 		val tokenStream = CommonTokenStream(this.lexer)
 
 		tokenStream.fill()
+
+		var preToken : WritableToken? = null
 		for (token in tokenStream.tokens) {
+			val currentToken = token as? WritableToken
+			this.lexer.fixToken(currentToken, preToken)
+
 			val lineCount = token.text.lines().count()
 			val endLine = token.line + lineCount - 1
 
@@ -83,6 +88,8 @@ class SourceCounter(val file: File, val type: String, val lexer: BaseLexer?) {
 				in documentTokens -> documentLines.addAll(lineRange)
 				in commentTokens -> commentLines.addAll(lineRange)
 			}
+
+			preToken = currentToken
 		}
 
 		this.countResult.total = maxLine
