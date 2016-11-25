@@ -20,7 +20,7 @@ All rights reserved.
    </license>
 
    <plugin
-         id="SourceCounter"
+         id="net.liying.SourceCounter"
          download-size="0"
          install-size="0"
          version="0.0.0"/>
