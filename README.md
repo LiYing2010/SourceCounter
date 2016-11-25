@@ -4,7 +4,7 @@ It can tell you that how many lines of statement/document/comment/empty in your 
 
 Current version
 ===========
-v1.7.0 released at 2016/09/06
+v1.7.1 released at 2016/11/25
 
 
 Install
@@ -36,7 +36,7 @@ Source File Supported
 - INI
 - BAT, CMD
 - Text
-- Python (TODO)
+- Python
 - Scala (TODO)
 - the others... (if you want to count some other source files, just tell me)
 
