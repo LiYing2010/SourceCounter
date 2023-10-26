@@ -11,7 +11,7 @@ Install
 ===========
 Eclipse update site:
 
-   http://www.liying-cn.net/updateSite/
+   https://plugins.liying-cn.net/updateSite/
 
 
 
